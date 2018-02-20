@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature } from "react-mapbox-gl";
-import Config from './config';
+import Config from '../config';
 
 const Mapbox = ReactMapboxGL({
   accessToken: Config.mapboxAccessToken
