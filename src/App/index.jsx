@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import './style.css';
 import Map from '../Map'
+import {getImageInfo} from '../utils'
 
 class App extends Component {
   constructor() {
@@ -28,6 +29,16 @@ class App extends Component {
     this.setState({
       images,
       dropzoneActive: false
+    });
+    images.map((image, i) => {
+      getImageInfo(image, (datetime, latitude, longitude) => {
+        image.metadata = {
+          datetime,
+          latitude,
+          longitude
+        };
+        console.log(image.metadata);
+      });
     });
   };
 

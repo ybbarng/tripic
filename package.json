@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "dotenv": "^5.0.0",
+    "exif-js": "^2.3.0",
     "mapbox-gl": "^0.44.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
