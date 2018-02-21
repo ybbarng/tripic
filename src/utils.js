@@ -29,19 +29,23 @@ const getLongitude = (image) => {
   return getAxisInfo(image, 'Longitude');
 }
 
-const getImageInfo = (image, callback) => {
-  if (image.type !== 'image/jpeg') {
-    return;
-  }
-  EXIF.getData(image, function() {
-    const datetime = EXIF.getTag(image, 'DateTimeOriginal');
-    const latitude = getLatitude(image);
-    const longitude = getLongitude(image);
-    callback(datetime, latitude, longitude);
+const getImageInfo = (image) => {
+  return new Promise((resolve, reject) => {
+    if (image.type !== 'image/jpeg') {
+      reject();
+    }
+    EXIF.getData(image, () => {
+      const datetime = EXIF.getTag(image, 'DateTimeOriginal');
+      const latitude = getLatitude(image);
+      const longitude = getLongitude(image);
+      resolve({
+        datetime,
+        latitude,
+        longitude
+      });
+    });
   });
 }
-
-
 
 export {
   convertDMStoDD,

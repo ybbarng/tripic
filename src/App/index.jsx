@@ -31,12 +31,8 @@ class App extends Component {
       dropzoneActive: false
     });
     images.map((image, i) => {
-      getImageInfo(image, (datetime, latitude, longitude) => {
-        image.metadata = {
-          datetime,
-          latitude,
-          longitude
-        };
+      getImageInfo(image).then((info) => {
+        image.metadata = info;
         console.log(image.metadata);
       });
     });
