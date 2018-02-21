@@ -8,6 +8,7 @@ const Mapbox = ReactMapboxGL({
 
 class Map extends Component {
   render() {
+    const { pics } = this.props;
     return (
       <Mapbox
         // eslint-disable-next-line
@@ -20,7 +21,11 @@ class Map extends Component {
           type="symbol"
           id="marker"
           layout={{ "icon-image": "marker-15" }}>
-          <Feature coordinates={[-0.481747846041145, 51.3233379650232]}/>
+          {
+            pics.map((pic, i) => {
+              return <Feature coordinates={pic.location} key={i} />
+            })
+          }
         </Layer>
       </Mapbox>
     );

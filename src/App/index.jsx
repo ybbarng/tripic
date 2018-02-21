@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import './style.css';
 import Map from '../Map'
-import {getImageInfo} from '../utils'
+import Pic from '../Pic'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      images: [],
+      pics: [],
       dropzoneActive: false
     }
   }
@@ -26,20 +26,18 @@ class App extends Component {
   };
 
   onDrop = (images) => {
-    this.setState({
-      images,
-      dropzoneActive: false
-    });
-    images.map((image, i) => {
-      getImageInfo(image).then((info) => {
-        image.metadata = info;
-        console.log(image.metadata);
+    Promise.all(Pic.fromImages(images))
+    .then((newPics) => {
+      const pics = this.state.pics.concat(newPics);
+      this.setState({
+        pics,
+        dropzoneActive: false
       });
     });
   };
 
   render() {
-    const { files, dropzoneActive } = this.state;
+    const { pics, dropzoneActive } = this.state;
     return (
       <Dropzone
         disableClick
@@ -54,7 +52,7 @@ class App extends Component {
           <header className="App-header">
             <h1 className="App-title">Tripic</h1>
           </header>
-          <Map />
+          <Map pics={pics}/>
         </div>
       </Dropzone>
     );
