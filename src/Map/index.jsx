@@ -18,9 +18,12 @@ class Map extends Component {
           width: "100vw"
         }}>
         <Layer
-          type="symbol"
+          type="circle"
           id="marker"
-          layout={{ "icon-image": "marker-15" }}>
+          paint={{
+            "circle-radius": 5,
+            "circle-color": '#9302f4'
+          }}>
           {
             pics.map((pic, i) => {
               return <Feature coordinates={pic.location} key={i} />
