@@ -6,11 +6,11 @@ import Pic from '../Pic'
 
 class App extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       pics: [],
       dropzoneActive: false
-    }
+    };
   }
 
   onDragEnter = () => {

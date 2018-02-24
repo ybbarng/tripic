@@ -1,0 +1,8 @@
+.mapboxgl-popup-content {
+  padding: 2px !important;
+}
+.mapbox-popup-image {
+  width: 80px;
+  height: 45px;
+}
+

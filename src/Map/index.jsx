@@ -1,14 +1,39 @@
 import React, { Component } from 'react';
-import ReactMapboxGL, { Layer, Feature } from "react-mapbox-gl";
+import ReactMapboxGL, { Layer, Feature, Popup } from "react-mapbox-gl";
 import Config from '../config';
+import './style.css';
 
 const Mapbox = ReactMapboxGL({
   accessToken: Config.mapboxAccessToken
 });
 
 class Map extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedPic: null
+    };
+  }
+
   render() {
+    const onClickMarker = (pic) => (
+      (mapWithEvent) => {
+        const newPic = this.state.selectedPic ? null : pic;
+        this.setState({
+          selectedPic: newPic
+        });
+      }
+    );
+
+    const createMarker = (pic, i) => (
+      <Feature
+        coordinates={pic.location}
+        onClick={onClickMarker(pic)}
+        key={i}
+        />
+    );
     const { pics } = this.props;
+    const { selectedPic } = this.state;
     return (
       <Mapbox
         // eslint-disable-next-line
@@ -24,12 +49,15 @@ class Map extends Component {
             "circle-radius": 5,
             "circle-color": '#9302f4'
           }}>
-          {
-            pics.map((pic, i) => {
-              return <Feature coordinates={pic.location} key={i} />
-            })
-          }
+          { pics.map(createMarker) }
         </Layer>
+        { selectedPic &&
+          <Popup
+            coordinates={selectedPic.location}
+            >
+            <img className="mapbox-popup-image" src={selectedPic.image.preview} />
+          </Popup>
+        }
       </Mapbox>
     );
   }
