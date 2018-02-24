@@ -68,7 +68,10 @@ class Map extends Component {
           type="circle"
           id="marker"
           paint={{
-            "circle-radius": 5,
+            "circle-radius": {
+              "base": 5,
+              "stops":[[11, 5], [18, 20]],
+            },
             "circle-color": '#9302f4'
           }}>
           { pics.map(createMarker) }
