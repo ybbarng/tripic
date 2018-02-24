@@ -11,17 +11,39 @@ class Map extends Component {
   constructor() {
     super();
     this.state = {
-      selectedPic: null
+      clickedPic: null,
+      hoveredPic: null
     };
   }
 
   render() {
+    const { pics } = this.props;
+    const { clickedPic, hoveredPic } = this.state;
+
     const onClickMarker = (pic) => (
       (mapWithEvent) => {
-        const newPic = this.state.selectedPic ? null : pic;
+        const newPic = (clickedPic === null || clickedPic !== pic) ? pic : null;
         this.setState({
-          selectedPic: newPic
+          clickedPic: newPic
         });
+      }
+    );
+
+    const onMouseEnterMarker = (pic) => (
+      (mapWithEvent) => {
+        this.setState({
+          hoveredPic: pic
+        });
+      }
+    );
+
+    const onMouseLeaveMarker = (pic) => (
+      (mapWithEvent) => {
+        if (hoveredPic === pic) {
+          this.setState({
+            hoveredPic: null
+          });
+        }
       }
     );
 
@@ -29,11 +51,11 @@ class Map extends Component {
       <Feature
         coordinates={pic.location}
         onClick={onClickMarker(pic)}
+        onMouseEnter={onMouseEnterMarker(pic)}
+        onMouseLeave={onMouseLeaveMarker(pic)}
         key={i}
         />
     );
-    const { pics } = this.props;
-    const { selectedPic } = this.state;
     return (
       <Mapbox
         // eslint-disable-next-line
@@ -51,11 +73,18 @@ class Map extends Component {
           }}>
           { pics.map(createMarker) }
         </Layer>
-        { selectedPic &&
+        { clickedPic &&
           <Popup
-            coordinates={selectedPic.location}
+            coordinates={clickedPic.location}
             >
-            <img className="mapbox-popup-image" src={selectedPic.image.preview} />
+            <img className="mapbox-popup-image" src={clickedPic.image.preview} />
+          </Popup>
+        }
+        { hoveredPic &&
+          <Popup
+            coordinates={hoveredPic.location}
+            >
+            <img className="mapbox-popup-image" src={hoveredPic.image.preview} />
           </Popup>
         }
       </Mapbox>
