@@ -50,10 +50,18 @@ class App extends Component {
   }
 
   onClickMarker = (clickedPic) => {
-    const newPic = (this.state.clickedPic === null || this.state.clickedPic !== clickedPic) ? clickedPic : null;
-    this.setState({
-      clickedPic: newPic
-    });
+    if (this.state.clickedPic === null ||
+        this.state.clickedPic !== clickedPic) {
+      this.setState({
+        center: clickedPic.location,
+        zoom: [11],
+        clickedPic
+      });
+    } else {
+      this.setState({
+        clickedPic: null
+      });
+    }
   };
 
   onMouseEnterMarker = (hoveredPic) => {
