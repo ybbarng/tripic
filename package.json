@@ -14,12 +14,15 @@
     "react-scripts": "1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "client": "yarn start",
-    "server": "node server/index.js"
+    "client": "react-scripts start",
+    "server": "node server/index.js",
+    "start": "concurrently \"yarn server\" \"yarn client\" -n \"server,client\""
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
   },
   "proxy": "http://localhost:3001/"
 }
