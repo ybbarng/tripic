@@ -19,21 +19,29 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
+    this.getPics()
+      .then(this.concatPics)
       .catch(err => console.log(err));
   };
 
-  callApi = async () => {
-    const response = await fetch('/api/hello');
+  getPics = async () => {
+    const response = await fetch('/api/pics.json');
     console.log(response);
-    const body = await response.json();
+    const pics = await response.json();
 
     if (response.status !== 200) {
-      throw Error(body.message);
+      throw Error(pics.message);
     }
-    console.log(body);
-    return body;
+    console.log(pics);
+    return pics;
+  };
+
+  concatPics = (newPics) => {
+    const pics = this.state.pics.concat(newPics);
+    this.setState({
+      pics,
+      dropzoneActive: false
+    });
   };
 
   onDragEnter = () => {
@@ -51,9 +59,8 @@ class App extends Component {
   onDrop = (images) => {
     Promise.all(Pic.fromImages(images))
     .then((newPics) => {
-      const pics = this.state.pics.concat(newPics);
+      this.concatPics(newPics);
       this.setState({
-        pics,
         dropzoneActive: false
       });
     });
