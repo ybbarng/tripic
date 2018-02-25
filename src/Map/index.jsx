@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactMapboxGL, { Layer, Feature, Popup } from "react-mapbox-gl";
+import ReactMapboxGL, { Layer, Feature, Popup, RotationControl, ZoomControl } from "react-mapbox-gl";
 import Config from '../config';
 import './style.css';
 
@@ -64,6 +64,8 @@ class Map extends Component {
           height: "100vh",
           width: "100vw"
         }}>
+        <ZoomControl />
+        <RotationControl />
         <Layer
           type="circle"
           id="marker"
