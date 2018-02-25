@@ -1,4 +1,4 @@
-import {getImageInfo} from './utils'
+import {getImageInfo} from '../utils'
 
 class Pic {
   constructor() {

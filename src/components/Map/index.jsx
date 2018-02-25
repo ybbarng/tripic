@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature, Popup, RotationControl, ZoomControl } from "react-mapbox-gl";
-import Config from '../config';
+import Config from '../../config';
 import './style.css';
 
 const Mapbox = ReactMapboxGL({
