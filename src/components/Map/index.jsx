@@ -8,62 +8,17 @@ const Mapbox = ReactMapboxGL({
 });
 
 class Map extends Component {
-  constructor() {
-    super();
-    this.state = {
-      center: [126.9687473, 37.5543629],
-      zoom: [11],
-      clickedPic: null,
-      hoveredPic: null
-    };
-  }
-
   render() {
-    const { pics } = this.props;
-    const { center, zoom, clickedPic, hoveredPic } = this.state;
-
-    const onMoveEndMap = (map, evt) => {
-      const center = map.getCenter();
-      const zoom = [map.getZoom()];
-      this.setState({
-        center: [center.lng, center.lat],
-        zoom
-      });
-    }
-
-    const onClickMarker = (pic) => (
-      (mapWithEvent) => {
-        const newPic = (clickedPic === null || clickedPic !== pic) ? pic : null;
-        this.setState({
-          clickedPic: newPic
-        });
-      }
-    );
-
-    const onMouseEnterMarker = (pic) => (
-      (mapWithEvent) => {
-        this.setState({
-          hoveredPic: pic
-        });
-      }
-    );
-
-    const onMouseLeaveMarker = (pic) => (
-      (mapWithEvent) => {
-        if (hoveredPic === pic) {
-          this.setState({
-            hoveredPic: null
-          });
-        }
-      }
-    );
+    const { pics, center, zoom, clickedPic, hoveredPic,
+      onMovedMap, onClickMarker, onMouseEnterMarker,
+      onMouseLeaveMarker } = this.props;
 
     const createMarker = (pic, i) => (
       <Feature
         coordinates={pic.location}
-        onClick={onClickMarker(pic)}
-        onMouseEnter={onMouseEnterMarker(pic)}
-        onMouseLeave={onMouseLeaveMarker(pic)}
+        onClick={onClickMarker.bind(null, pic)}
+        onMouseEnter={onMouseEnterMarker.bind(null, pic)}
+        onMouseLeave={onMouseLeaveMarker.bind(null, pic)}
         key={i}
         />
     );
@@ -71,7 +26,7 @@ class Map extends Component {
       <Mapbox
         // eslint-disable-next-line
         style="mapbox://styles/mapbox/streets-v9"
-        onMoveEnd={onMoveEndMap}
+        onMoveEnd={onMovedMap}
         center={center}
         zoom={zoom}
         containerStyle={{

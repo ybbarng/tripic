@@ -9,7 +9,11 @@ class App extends Component {
     super();
     this.state = {
       pics: [],
-      dropzoneActive: false
+      dropzoneActive: false,
+      center: [126.9687473, 37.5543629],
+      zoom: [11],
+      clickedPic: null,
+      hoveredPic: null
     };
   }
 
@@ -36,8 +40,38 @@ class App extends Component {
     });
   };
 
+  onMovedMap = (map, evt) => {
+    const center = map.getCenter();
+    const zoom = [map.getZoom()];
+    this.setState({
+      center: [center.lng, center.lat],
+      zoom
+    });
+  }
+
+  onClickMarker = (clickedPic) => {
+    const newPic = (this.state.clickedPic === null || this.state.clickedPic !== clickedPic) ? clickedPic : null;
+    this.setState({
+      clickedPic: newPic
+    });
+  };
+
+  onMouseEnterMarker = (hoveredPic) => {
+    this.setState({
+      hoveredPic
+    });
+  };
+
+  onMouseLeaveMarker = (hoveredPic) => {
+    if (hoveredPic === this.state.hoveredPic) {
+      this.setState({
+        hoveredPic: null
+      });
+    }
+  };
+
   render() {
-    const { pics, dropzoneActive } = this.state;
+    const { pics, center, zoom, dropzoneActive, clickedPic, hoveredPic } = this.state;
     return (
       <Dropzone
         disableClick
@@ -52,7 +86,17 @@ class App extends Component {
           <header className="App-header">
             <h1 className="App-title">Tripic</h1>
           </header>
-          <Map pics={pics}/>
+          <Map
+            pics={pics}
+            center={center}
+            zoom={zoom}
+            clickedPic={clickedPic}
+            hoveredPic={hoveredPic}
+            onMovedMap={this.onMovedMap}
+            onClickMarker={this.onClickMarker}
+            onMouseEnterMarker={this.onMouseEnterMarker}
+            onMouseLeaveMarker={this.onMouseLeaveMarker}
+            />
         </div>
       </Dropzone>
     );
