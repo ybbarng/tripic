@@ -11,6 +11,8 @@ class Map extends Component {
   constructor() {
     super();
     this.state = {
+      center: [126.9687473, 37.5543629],
+      zoom: [11],
       clickedPic: null,
       hoveredPic: null
     };
@@ -18,7 +20,16 @@ class Map extends Component {
 
   render() {
     const { pics } = this.props;
-    const { clickedPic, hoveredPic } = this.state;
+    const { center, zoom, clickedPic, hoveredPic } = this.state;
+
+    const onMoveEndMap = (map, evt) => {
+      const center = map.getCenter();
+      const zoom = [map.getZoom()];
+      this.setState({
+        center: [center.lng, center.lat],
+        zoom
+      });
+    }
 
     const onClickMarker = (pic) => (
       (mapWithEvent) => {
@@ -60,6 +71,9 @@ class Map extends Component {
       <Mapbox
         // eslint-disable-next-line
         style="mapbox://styles/mapbox/streets-v9"
+        onMoveEnd={onMoveEndMap}
+        center={center}
+        zoom={zoom}
         containerStyle={{
           height: "100vh",
           width: "100vw"
