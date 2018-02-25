@@ -13,9 +13,28 @@ class App extends Component {
       center: [126.9687473, 37.5543629],
       zoom: [11],
       clickedPic: null,
-      hoveredPic: null
+      hoveredPic: null,
+      response: ''
     };
   }
+
+  componentDidMount = () => {
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .catch(err => console.log(err));
+  };
+
+  callApi = async () => {
+    const response = await fetch('/api/hello');
+    console.log(response);
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    console.log(body);
+    return body;
+  };
 
   onDragEnter = () => {
     this.setState({
