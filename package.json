@@ -18,11 +18,12 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "client": "react-scripts start",
-    "server": "node server/index.js",
+    "server": "nodemon server/index.js",
     "start": "concurrently \"yarn server\" \"yarn client\" -n \"server,client\""
   },
   "devDependencies": {
-    "concurrently": "^3.5.1"
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.15.1"
   },
   "proxy": "http://localhost:3001/"
 }
