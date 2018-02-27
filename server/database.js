@@ -96,6 +96,31 @@ class Database {
     return connection.query('DELETE FROM Tags WHERE id = ?', [tag.id]);
   }
 
+  createPic(connection, pic) {
+    connection = connection || this.pool;
+    return connection.query('INSERT INTO Pics (trip_id, datetime, location, image_url) VALUES (?, ?, Point(?, ?), ?)', [pic.trip_id, pic.datetime, pic.longitude, pic.latitude, pic.image_url]);
+  }
+
+  readPics(connection) {
+    connection = connection || this.pool;
+    return connection.query(
+      `SELECT Pics.id as pic_id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as longitude, ST_X(location) as latitude, image_url
+      FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id`);
+  }
+
+  updatePic(connection, patch) {
+    connection = connection || this.pool;
+    return connection.query('UPDATE Pics SET ? WHERE id = ?', [patch.diff, patch.id]);
+  }
+
+  deletePic(connection, pic) {
+    if (!pic.id) {
+      throw 'The id of pic is not provided';
+    }
+    connection = connection || this.pool;
+    return connection.query('DELETE FROM Pics WHERE id = ?', [pic.id]);
+  }
+
   getPics() {
   }
 }
