@@ -1,0 +1,33 @@
+.triplist-open {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.triplist-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font: 30px/100% arial, sans-serif;
+  width: 40px;
+  height: 40px;
+  line-height: 30px;
+  padding: 0;
+  color: #777;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #aaa;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.triplist-modal-close:hover {
+  color: #4286f4;
+}
+
+
+.triplist-modal-close:after {
+  content: &#10006;
+}

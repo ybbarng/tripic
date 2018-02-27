@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
+import React, { Component } from 'react'; import Dropzone from 'react-dropzone';
 import './style.css';
-import Map from '../Map'
-import Pic from '../Pic'
+import Map from '../Map';
+import Pic from '../Pic';
+import TripList from '../TripList';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      trips: [],
       pics: [],
       dropzoneActive: false,
       center: [126.9687473, 37.5543629],
       zoom: [11],
       clickedPic: null,
       hoveredPic: null,
-      response: ''
+      response: '',
+      modalVisible: false,
     };
   }
 
@@ -22,7 +24,9 @@ class App extends Component {
     this.getPics()
       .then(this.concatPics)
       .catch(err => console.log(err));
-    this.getTrips();
+    this.getTrips()
+      .then(this.updateTrips)
+      .catch(err => console.log(err));
   };
 
   getApi = async (url) => {
@@ -41,7 +45,7 @@ class App extends Component {
     return this.getApi('pics.json');
   };
 
-  getTrips = async () => {
+  getTrips = () => {
     return this.getApi('trips.json');
   };
 
@@ -50,6 +54,12 @@ class App extends Component {
     this.setState({
       pics,
       dropzoneActive: false
+    });
+  };
+
+  updateTrips = (trips) => {
+    this.setState({
+      trips
     });
   };
 
@@ -82,7 +92,7 @@ class App extends Component {
       center: [center.lng, center.lat],
       zoom
     });
-  }
+  };
 
   onClickMarker = (clickedPic) => {
     if (this.state.clickedPic === null ||
@@ -113,8 +123,25 @@ class App extends Component {
     }
   };
 
+  setModalVisible = (modalVisible) => {
+    this.setState({
+      modalVisible
+    });
+  };
+
+  openModal = () => {
+    this.setModalVisible(true);
+  };
+
+  closeModal = () => {
+    this.setModalVisible(false);
+  };
+
+  afterModalOpen = () => {
+  };
+
   render() {
-    const { pics, center, zoom, dropzoneActive, clickedPic, hoveredPic } = this.state;
+    const { pics, trips, center, zoom, dropzoneActive, clickedPic, hoveredPic, modalVisible } = this.state;
     return (
       <Dropzone
         disableClick
@@ -139,6 +166,13 @@ class App extends Component {
             onClickMarker={this.onClickMarker}
             onMouseEnterMarker={this.onMouseEnterMarker}
             onMouseLeaveMarker={this.onMouseLeaveMarker}
+            />
+          <TripList
+            trips={trips}
+            modalVisible={modalVisible}
+            openModal={this.openModal}
+            closeModal={this.closeModal}
+            afterModalOpen={this.afterModalOpen}
             />
         </div>
       </Dropzone>
