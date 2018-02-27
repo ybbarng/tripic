@@ -16,6 +16,12 @@ app.get('/api/pics.json', (req, res) => {
   res.send([]);
 });
 
+app.get('/api/trips.json', (req, res) => {
+  database.readTrips().then((row) => {
+    res.send(row);
+  });
+});
+
 app.listen(port, () => {
   console.log(`Express server is running on port ${port}`);
 });

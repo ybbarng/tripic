@@ -22,18 +22,27 @@ class App extends Component {
     this.getPics()
       .then(this.concatPics)
       .catch(err => console.log(err));
+    this.getTrips();
   };
 
-  getPics = async () => {
-    const response = await fetch('/api/pics.json');
+  getApi = async (url) => {
+    const response = await fetch(`/api/${url}`);
     console.log(response);
-    const pics = await response.json();
+    const body = await response.json();
 
     if (response.status !== 200) {
-      throw Error(pics.message);
+      throw Error(body.message);
     }
-    console.log(pics);
-    return pics;
+    console.log(body);
+    return body;
+  };
+
+  getPics = () => {
+    return this.getApi('pics.json');
+  };
+
+  getTrips = async () => {
+    return this.getApi('trips.json');
   };
 
   concatPics = (newPics) => {
