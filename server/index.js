@@ -13,7 +13,9 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.get('/api/pics.json', (req, res) => {
-  res.send([]);
+  database.readPics().then((row) => {
+    res.send(row);
+  });
 });
 
 app.get('/api/trips.json', (req, res) => {
