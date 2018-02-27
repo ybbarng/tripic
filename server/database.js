@@ -67,6 +67,35 @@ class Database {
     return connection.query('DELETE FROM Trips WHERE id = ?', [trip.id]);
   }
 
+  createTag(connection, tag) {
+    if (!tag.name) {
+      throw 'The name of tag is not provided';
+    }
+    connection = connection || this.pool;
+    return connection.query('INSERT INTO Tags (name) VALUES (?)', [tag.name]);
+  }
+
+  readTags(connection) {
+    connection = connection || this.pool;
+    return connection.query(
+      `SELECT Tags.id as tag_id, Tags.name as tag_name, count(PicsTags.tag_id) as n_pics
+      FROM Tags LEFT OUTER JOIN PicsTags on Tags.id = PicsTags.tag_id
+      GROUP BY Tags.id, Tags.name`);
+  }
+
+  updateTag(connection, tag) {
+    connection = connection || this.pool;
+    return connection.query('UPDATE Tags SET name = ? WHERE id = ?', [tag.name, tag.id]);
+  }
+
+  deleteTag(connection, tag) {
+    if (!tag.id) {
+      throw 'The id of tag is not provided';
+    }
+    connection = connection || this.pool;
+    return connection.query('DELETE FROM Tags WHERE id = ?', [tag.id]);
+  }
+
   getPics() {
   }
 }
