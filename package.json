@@ -7,6 +7,7 @@
     "exif-js": "^2.3.0",
     "express": "^4.16.2",
     "mapbox-gl": "^0.44.0",
+    "mysql": "^2.15.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.8",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
+    "express": "^4.16.2",
     "nodemon": "^1.15.1"
   },
   "proxy": "http://localhost:3001/"

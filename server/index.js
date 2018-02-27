@@ -1,7 +1,11 @@
 const express = require('express');
+const database = require('./database');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+database.createTables();
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello from Express' });
