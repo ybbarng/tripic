@@ -3,8 +3,21 @@
   top: 20px;
   right: 20px;
   font-size: 15px;
-  padding: 5px;
+  padding: 8px;
 }
+
+.triplist-open:before {
+  /* 🛫, &#128747; */
+  background-image: url('https://emojipedia-us.s3.amazonaws.com/thumbs/240/apple/118/airplane-departure_1f6eb.png');
+  background-size: 15px 15px;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  content: '';
+  margin-right: 3px;
+}
+
+
 .triplist-modal-header {
   top: 0;
   left: 0;

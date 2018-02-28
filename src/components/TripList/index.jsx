@@ -9,7 +9,7 @@ class TripList extends Component {
     console.log(trips);
     return (
       <div>
-        <button className="triplist-open" onClick={openModal}>&#128748;여행 목록</button>
+        <button className="triplist-open" onClick={openModal}>여행 목록</button>
         <Modal
           isOpen={modalVisible}
           onAfterOpen={afterModalOpen}
