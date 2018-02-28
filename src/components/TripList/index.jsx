@@ -27,6 +27,8 @@ class TripList extends Component {
                 <h3 className="triplist-modal-trips-entry-title">{ trip.trip_name }</h3>
                 <Dropzone
                   className="triplist-modal-trips-entry-dropzone"
+                  activeClassName="triplist-modal-trips-entry-dropzone-active"
+                  rejectClassName="triplist-modal-trips-entry-dropzone-reject"
                   accept="image/jpeg, image/png"
                   onDrop={ onDrop.bind(null, trip) }
                   >
