@@ -22,12 +22,12 @@ const getAxisInfo = (image, axisName) => {
 // Run in callback of EXIF.getData()
 const getLatitude = (image) => {
   return getAxisInfo(image, 'Latitude');
-}
+};
 
 // Run in callback of EXIF.getData()
 const getLongitude = (image) => {
   return getAxisInfo(image, 'Longitude');
-}
+};
 
 const getImageInfo = (image) => {
   return new Promise((resolve, reject) => {
@@ -45,9 +45,14 @@ const getImageInfo = (image) => {
       });
     });
   });
-}
+};
+
+const editElement = (array, element, newEntry) => {
+  return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
+};
 
 export {
   convertDMStoDD,
-  getImageInfo
+  getImageInfo,
+  editElement
 };

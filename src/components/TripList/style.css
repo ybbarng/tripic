@@ -69,11 +69,29 @@
   margin-bottom: 0.5em;
 }
 
+.triplist-modal-trips-entry-body {
+  display: flex;
+  direction: horizontal;
+}
+
+.triplist-modal-trips-entry-pics {
+  background-color: #eee;
+  height: 216px;
+  flex-grow: 1;
+}
+
+.triplist-modal-trips-entry-pics-entry {
+  width: 96px;
+  height: 54px;
+  padding: 2px;
+  margin: 3px;
+}
+
 .triplist-modal-trips-entry-dropzone {
   width: 150px;
   outline: 2px dashed #92b0b3;
   outline-offset: -5px;
-  padding: 30px 20px;
+  padding: 60px 20px;
   background-color: #eff9fc;
 }
 

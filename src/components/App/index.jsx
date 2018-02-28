@@ -3,6 +3,7 @@ import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
 import TripList from '../TripList';
+import { editElement } from '../../utils';
 
 class App extends Component {
   constructor() {
@@ -10,7 +11,6 @@ class App extends Component {
     this.state = {
       trips: [],
       pics: [],
-      dropzoneActive: false,
       center: [126.9687473, 37.5543629],
       zoom: [11],
       clickedPic: null,
@@ -52,8 +52,7 @@ class App extends Component {
   concatPics = (newPics) => {
     const pics = this.state.pics.concat(newPics);
     this.setState({
-      pics,
-      dropzoneActive: false
+      pics
     });
   };
 
@@ -63,15 +62,19 @@ class App extends Component {
     });
   };
 
-  onDrop = (trip, images) => {
-    console.log(trip);
-    console.log(images);
+  appendPicsToTrip = (trip, newPics) => {
+    const pics = trip.pics ? trip.pics.concat(newPics) : newPics;
+    console.log(pics);
+    const newTrips = editElement(this.state.trips, trip, { pics });
+    this.setState({
+      trips: newTrips
+    });
+  };
+
+  onDrop = (trip, images, rejects) => {
     Promise.all(Pic.fromImages(images))
     .then((newPics) => {
-      this.concatPics(newPics);
-      this.setState({
-        dropzoneActive: false
-      });
+      this.appendPicsToTrip(trip, newPics);
     });
   };
 
@@ -131,7 +134,7 @@ class App extends Component {
   };
 
   render() {
-    const { pics, trips, center, zoom, dropzoneActive, clickedPic, hoveredPic, modalVisible } = this.state;
+    const { pics, trips, center, zoom, clickedPic, hoveredPic, modalVisible } = this.state;
     return (
     <div className="App">
       <header className="App-header">
