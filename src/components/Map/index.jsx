@@ -33,8 +33,16 @@ class Map extends Component {
           height: "100vh",
           width: "100vw"
         }}>
-        <ZoomControl />
-        <RotationControl />
+        <ZoomControl
+          style={{
+            top: "50px"
+          }}
+          position="top-left" />
+        <RotationControl
+          style={{
+            top: "102px"
+          }}
+          position="top-left" />
         <Layer
           type="circle"
           id="marker"
