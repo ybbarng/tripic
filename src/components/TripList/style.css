@@ -5,6 +5,16 @@
   font-size: 15px;
   padding: 5px;
 }
+.triplist-modal-header {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+}
+
+.triplist-modal-title {
+  margin: 10px 0 0 0;
+}
 
 .triplist-modal-close {
   position: absolute;
@@ -30,4 +40,46 @@
 
 .triplist-modal-close:after {
   content: &#10006;
+}
+
+.triplist-modal-trips {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  overflow-y: auto;
+}
+
+.triplist-modal-trips-entry-title {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.triplist-modal-trips-entry-dropzone {
+  width: 150px;
+  outline: 2px dashed #92b0b3;
+  outline-offset: -5px;
+  padding: 30px 20px;
+  background-color: #eff9fc;
+}
+
+.triplist-modal-trips-entry-dropzone-guide {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+.triplist-modal-trips-entry-dropzone-guide-icon {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 20px;
+	fill: #92b0b3;
+}
+
+.triplist-modal-trips-entry-dropzone-guide p {
+  font-size: 15px;
+  padding: 0;
+  margin: 0;
 }

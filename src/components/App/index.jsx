@@ -1,4 +1,4 @@
-import React, { Component } from 'react'; import Dropzone from 'react-dropzone';
+import React, { Component } from 'react';
 import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
@@ -63,19 +63,9 @@ class App extends Component {
     });
   };
 
-  onDragEnter = () => {
-    this.setState({
-      dropzoneActive: true
-    });
-  };
-
-  onDragLeave = () => {
-    this.setState({
-      dropzoneActive: false
-    });
-  };
-
-  onDrop = (images) => {
+  onDrop = (trip, images) => {
+    console.log(trip);
+    console.log(images);
     Promise.all(Pic.fromImages(images))
     .then((newPics) => {
       this.concatPics(newPics);
@@ -143,39 +133,30 @@ class App extends Component {
   render() {
     const { pics, trips, center, zoom, dropzoneActive, clickedPic, hoveredPic, modalVisible } = this.state;
     return (
-      <Dropzone
-        disableClick
-        style={{ position: "relative" }}
-        accept="image/jpeg, image/png"
-        onDrop={ this.onDrop }
-        onDragEnter={ this.onDragEnter }
-        onDragLeave={ this.onDragLeave }
-        >
-        { dropzoneActive && <div className="overlay">여기에 업로드할 사진을 놓으세요.</div> }
-        <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">Tripic</h1>
-          </header>
-          <Map
-            pics={pics}
-            center={center}
-            zoom={zoom}
-            clickedPic={clickedPic}
-            hoveredPic={hoveredPic}
-            onMovedMap={this.onMovedMap}
-            onClickMarker={this.onClickMarker}
-            onMouseEnterMarker={this.onMouseEnterMarker}
-            onMouseLeaveMarker={this.onMouseLeaveMarker}
-            />
-          <TripList
-            trips={trips}
-            modalVisible={modalVisible}
-            openModal={this.openModal}
-            closeModal={this.closeModal}
-            afterModalOpen={this.afterModalOpen}
-            />
-        </div>
-      </Dropzone>
+    <div className="App">
+      <header className="App-header">
+        <h1 className="App-title">Tripic</h1>
+      </header>
+      <Map
+        pics={pics}
+        center={center}
+        zoom={zoom}
+        clickedPic={clickedPic}
+        hoveredPic={hoveredPic}
+        onMovedMap={this.onMovedMap}
+        onClickMarker={this.onClickMarker}
+        onMouseEnterMarker={this.onMouseEnterMarker}
+        onMouseLeaveMarker={this.onMouseLeaveMarker}
+        />
+      <TripList
+        trips={trips}
+        modalVisible={modalVisible}
+        openModal={this.openModal}
+        closeModal={this.closeModal}
+        afterModalOpen={this.afterModalOpen}
+        onDrop={this.onDrop}
+        />
+    </div>
     );
   }
 }
