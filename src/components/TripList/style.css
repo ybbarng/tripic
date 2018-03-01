@@ -59,8 +59,11 @@
 }
 
 .triplist-modal-trips-entry-title {
+  font-size: 1.3em;
+  font-weight: bold;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  display: inline-block;
 }
 
 .triplist-modal-trips-entry-body {

@@ -47,16 +47,28 @@ const getImageInfo = (image) => {
   });
 };
 
-const getApi = async (url) => {
-  const response = await fetch(`/api/${url}`);
+const requestApi = async (url, method, headers, body) => {
+  const response = await fetch(`/api/${url}`, {
+    method,
+    headers,
+    body
+  });
   console.log(response);
-  const body = await response.json();
+  const responseBody = await response.json();
 
   if (response.status !== 200) {
-    throw Error(body.message);
+    throw Error(responseBody.message);
   }
-  console.log(body);
-  return body;
+  console.log(responseBody);
+  return responseBody;
+};
+
+const getApi = (url) => {
+  return requestApi(url, 'get');
+};
+
+const putApi = (url, headers, body) => {
+  return requestApi(url, 'put', headers, body);
 };
 
 const editElement = (array, element, newEntry) => {
@@ -68,4 +80,5 @@ export {
   getImageInfo,
   editElement,
   getApi,
+  putApi,
 };

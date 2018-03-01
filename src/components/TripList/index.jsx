@@ -5,7 +5,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.css';
 import Pic from '../Pic';
-import { editElement, getApi } from '../../utils';
+import { editElement, getApi, putApi } from '../../utils';
 
 class TripList extends Component {
   constructor() {
@@ -77,6 +77,40 @@ class TripList extends Component {
     });
   }
 
+  changeTripName = (tripId, name) => {
+    return putApi(
+      `trip/${tripId}`,
+      {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      JSON.stringify({ name })).then((body) => {
+        const trip = this.getTripById(tripId);
+        const newTrips = editElement(this.state.trips, trip, { name });
+        this.setState({
+          trips: newTrips
+        });
+      });
+  };
+
+  onKeyDownTripName = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+    }
+  };
+
+  onKeyUpTripName = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.target.blur();
+      if (this.state.selectedTripId) {
+        this.changeTripName(
+          this.state.selectedTripId,
+          event.target.textContent);
+      }
+    }
+  };
+
   render() {
     const { trips, modalVisible, selectedTripId } = this.state;
     const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
@@ -108,7 +142,13 @@ class TripList extends Component {
           {
             selectedTrip && (
               <div className="triplist-modal-trips-entry">
-                <h3 className="triplist-modal-trips-entry-title">{ selectedTrip.name }</h3>
+                <h3
+                  className="triplist-modal-trips-entry-title"
+                  contentEditable="true"
+                  suppressContentEditableWarning={true}
+                  onKeyDown={this.onKeyDownTripName}
+                  onKeyUp={this.onKeyUpTripName}
+                  >{ selectedTrip.name }</h3>
                 <div className="triplist-modal-trips-entry-body">
                   <div className="triplist-modal-trips-entry-pics">
                   {
