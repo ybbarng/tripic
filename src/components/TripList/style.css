@@ -56,12 +56,6 @@
 }
 
 .triplist-modal-trips {
-  position: absolute;
-  top: 60px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  overflow-y: auto;
 }
 
 .triplist-modal-trips-entry-title {

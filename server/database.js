@@ -49,7 +49,7 @@ class Database {
   readTrips(connection) {
     connection = connection || this.pool;
     return connection.query(
-      `SELECT Trips.id as id, Trips.name as trip_name, count(Pics.trip_id) as n_pics
+      `SELECT Trips.id as id, Trips.name as name, count(Pics.trip_id) as n_pics
       FROM Trips LEFT OUTER JOIN Pics on Trips.id = Pics.trip_id
       GROUP BY Trips.id, Trips.name`);
   }
@@ -78,7 +78,7 @@ class Database {
   readTags(connection) {
     connection = connection || this.pool;
     return connection.query(
-      `SELECT Tags.id as id, Tags.name as tag_name, count(PicsTags.tag_id) as n_pics
+      `SELECT Tags.id as id, Tags.name as name, count(PicsTags.tag_id) as n_pics
       FROM Tags LEFT OUTER JOIN PicsTags on Tags.id = PicsTags.tag_id
       GROUP BY Tags.id, Tags.name`);
   }
