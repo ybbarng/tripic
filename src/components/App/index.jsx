@@ -3,13 +3,12 @@ import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
 import TripList from '../TripList';
-import { editElement } from '../../utils';
+import { editElement, getApi } from '../../utils';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      trips: [],
       pics: [],
       center: [126.9687473, 37.5543629],
       zoom: [11],
@@ -24,57 +23,16 @@ class App extends Component {
     this.getPics()
       .then(this.concatPics)
       .catch(err => console.log(err));
-    this.getTrips()
-      .then(this.updateTrips)
-      .catch(err => console.log(err));
-  };
-
-  getApi = async (url) => {
-    const response = await fetch(`/api/${url}`);
-    console.log(response);
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    console.log(body);
-    return body;
   };
 
   getPics = () => {
-    return this.getApi('pics.json');
-  };
-
-  getTrips = () => {
-    return this.getApi('trips.json');
+    return getApi('pics.json');
   };
 
   concatPics = (newPics) => {
     const pics = this.state.pics.concat(newPics);
     this.setState({
       pics
-    });
-  };
-
-  updateTrips = (trips) => {
-    this.setState({
-      trips
-    });
-  };
-
-  appendPicsToTrip = (trip, newPics) => {
-    const pics = trip.pics ? trip.pics.concat(newPics) : newPics;
-    console.log(pics);
-    const newTrips = editElement(this.state.trips, trip, { pics });
-    this.setState({
-      trips: newTrips
-    });
-  };
-
-  onDrop = (trip, images, rejects) => {
-    Promise.all(Pic.fromImages(images))
-    .then((newPics) => {
-      this.appendPicsToTrip(trip, newPics);
     });
   };
 
@@ -116,25 +74,8 @@ class App extends Component {
     }
   };
 
-  setModalVisible = (modalVisible) => {
-    this.setState({
-      modalVisible
-    });
-  };
-
-  openModal = () => {
-    this.setModalVisible(true);
-  };
-
-  closeModal = () => {
-    this.setModalVisible(false);
-  };
-
-  afterModalOpen = () => {
-  };
-
   render() {
-    const { pics, trips, center, zoom, clickedPic, hoveredPic, modalVisible } = this.state;
+    const { pics, center, zoom, clickedPic, hoveredPic } = this.state;
     return (
     <div className="App">
       <header className="App-header">
@@ -152,12 +93,6 @@ class App extends Component {
         onMouseLeaveMarker={this.onMouseLeaveMarker}
         />
       <TripList
-        trips={trips}
-        modalVisible={modalVisible}
-        openModal={this.openModal}
-        closeModal={this.closeModal}
-        afterModalOpen={this.afterModalOpen}
-        onDrop={this.onDrop}
         />
     </div>
     );

@@ -47,6 +47,18 @@ const getImageInfo = (image) => {
   });
 };
 
+const getApi = async (url) => {
+  const response = await fetch(`/api/${url}`);
+  console.log(response);
+  const body = await response.json();
+
+  if (response.status !== 200) {
+    throw Error(body.message);
+  }
+  console.log(body);
+  return body;
+};
+
 const editElement = (array, element, newEntry) => {
   return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
 };
@@ -54,5 +66,6 @@ const editElement = (array, element, newEntry) => {
 export {
   convertDMStoDD,
   getImageInfo,
-  editElement
+  editElement,
+  getApi,
 };
