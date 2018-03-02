@@ -1,0 +1,70 @@
+.trip-entry-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  display: inline-block;
+}
+
+.trip-entry-title[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: #bf4a3d;
+  opacity: 0.5;
+}
+
+.trip-entry-body {
+  display: flex;
+  direction: horizontal;
+}
+
+.trip-entry-pics {
+  background-color: #eee;
+  height: 216px;
+  flex-grow: 1;
+}
+
+.trip-entry-pics-entry {
+  width: 96px;
+  height: 54px;
+  padding: 2px;
+  margin: 3px;
+}
+
+.trip-entry-dropzone {
+  width: 150px;
+  outline: 2px dashed #92b0b3;
+  outline-offset: -5px;
+  padding: 60px 20px;
+  background-color: #eff9fc;
+}
+
+.trip-entry-dropzone-active {
+  outline: 2px dashed #04d65b;
+  background-color: #d7e2e5;
+}
+
+.trip-entry-dropzone-reject {
+  outline: 2px dashed #d60404;
+  background-color: #e5d7d7;
+}
+
+.trip-entry-dropzone-guide {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+.trip-entry-dropzone-guide-icon {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 20px;
+	fill: #92b0b3;
+}
+
+.trip-entry-dropzone-guide p {
+  font-size: 15px;
+  padding: 0;
+  margin: 0;
+}
