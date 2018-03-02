@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import Modal from 'react-modal';
+import React, { Component } from 'react'; import Modal from 'react-modal';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.css';
@@ -12,7 +11,8 @@ class TripList extends Component {
     super();
     this.state = {
       trips: [],
-      selectedTripId: null
+      selectedTripId: null,
+      lock: true
     }
     this.newTripId = Number.MAX_SAFE_INTEGER;
     this.newTripName = '새 여행 추가';
@@ -51,6 +51,12 @@ class TripList extends Component {
     });
   };
 
+  onClickLock = () => {
+    this.setState({
+      lock: !this.state.lock
+    });
+  };
+
   onDrop = (tripId, images, rejects) => {
     Promise.all(Pic.fromImages(images))
     .then((newPics) => {
@@ -80,7 +86,8 @@ class TripList extends Component {
       return;
     }
     this.setState({
-      selectedTripId: tripOption.value
+      selectedTripId: tripOption.value,
+      lock: true
     });
   };
 
@@ -155,7 +162,7 @@ class TripList extends Component {
   };
 
   render() {
-    const { trips, modalVisible, selectedTripId } = this.state;
+    const { trips, modalVisible, selectedTripId, lock } = this.state;
     const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
     const tripOptions = trips && trips.map((trip) => ({
       value: trip.id,
@@ -190,6 +197,8 @@ class TripList extends Component {
                 onKeyUpTripName={this.onKeyUpTripName}
                 tripName={selectedTrip.message || selectedTrip.name}
                 pics={selectedTrip.pics}
+                onClickLock={this.onClickLock}
+                lock={lock}
                 onDrop={this.onDrop}
                 />
             )
