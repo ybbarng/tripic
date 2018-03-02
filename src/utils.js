@@ -75,6 +75,10 @@ const putApi = (url, headers, body) => {
   return requestApi(url, 'put', headers, body);
 };
 
+const deleteApi = (url, headers, body) => {
+  return requestApi(url, 'delete', headers, body);
+};
+
 const editElement = (array, element, newEntry) => {
   return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
 };
@@ -86,4 +90,5 @@ export {
   getApi,
   postApi,
   putApi,
+  deleteApi,
 };

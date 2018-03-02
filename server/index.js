@@ -83,6 +83,35 @@ app.put('/api/trip/:tripId', (req, res) => {
   });
 });
 
+app.delete('/api/trip/:tripId', (req, res) => {
+  if (!req.params.tripId) {
+    res.status(400).send({
+      error: 'Invalid id of Trip'
+    });
+    return;
+  }
+  const tripIdInt = parseInt(req.params.tripId);
+  if (isNaN(tripIdInt)) {
+    res.status(400).send({
+      error: 'Invalid id of Trip'
+    });
+    return;
+  }
+  database.deleteTrip(null, {
+    id: tripIdInt,
+  }).then(() => {
+    res.status(200).send({
+      message: `Trip ${tripIdInt} is deleted`
+    });
+  }).catch((error) => {
+    console.log(error);
+    let errorMessage = '';
+    res.status(400).send({
+      error: errorMessage
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Express server is running on port ${port}`);
 });

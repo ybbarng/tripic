@@ -1,10 +1,13 @@
-import React, { Component } from 'react'; import Modal from 'react-modal';
+import React, { Component } from 'react';
+import Modal from 'react-modal';
 import Select from 'react-select';
+import { confirmAlert } from 'react-confirm-alert';
 import 'react-select/dist/react-select.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import './style.css';
 import TripEntry from '../TripEntry';
 import Pic from '../Pic';
-import { editElement, getApi, postApi, putApi } from '../../utils';
+import { editElement, getApi, postApi, putApi, deleteApi } from '../../utils';
 
 class TripList extends Component {
   constructor() {
@@ -55,6 +58,42 @@ class TripList extends Component {
     this.setState({
       lock: !this.state.lock
     });
+  };
+
+  onClickRemove = () => {
+    confirmAlert({
+      title: '여행 삭제',
+      message: '정말로 이 여행 항목을 삭제하시겠습니까?',
+      confirmLabel: '삭제',
+      cancelLabel: '취소',
+      onConfirm: this.removeSelectedTrip,
+    });
+  };
+
+  removeSelectedTrip = () => {
+    const trip = this.getTripById(this.state.selectedTripId);
+    if (!trip) {
+      return;
+    }
+    return deleteApi(
+      `trip/${trip.id}`,
+      {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }).then((body) => {
+        const newTrips = this.state.trips.slice();
+        const index = newTrips.indexOf(trip);
+        if (index < 0) {
+          return;
+        }
+        newTrips.splice(index, 1);
+        this.setState({
+          trips: newTrips,
+          selectedTripId: null
+        });
+      }).catch((err) => {
+        console.log(err);
+      });
   };
 
   onDrop = (tripId, images, rejects) => {
@@ -193,12 +232,13 @@ class TripList extends Component {
             selectedTrip && (
               <TripEntry
                 tripId={selectedTrip.id}
+                pics={selectedTrip.pics}
+                lock={lock}
                 onKeyDownTripName={this.onKeyDownTripName}
                 onKeyUpTripName={this.onKeyUpTripName}
                 tripName={selectedTrip.message || selectedTrip.name}
-                pics={selectedTrip.pics}
                 onClickLock={this.onClickLock}
-                lock={lock}
+                onClickRemove={this.onClickRemove}
                 onDrop={this.onDrop}
                 />
             )

@@ -10,7 +10,7 @@ class TripEntry extends Component {
   }
 
   render() {
-    const { tripId, onKeyDownTripName, onKeyUpTripName, tripName, pics, onClickLock, lock, onDrop } = this.props;
+    const { tripId, pics, lock, onKeyDownTripName, onKeyUpTripName, tripName, onClickLock, onClickRemove, onDrop } = this.props;
     return (
       <div className="trip-entry">
         <h3
@@ -22,8 +22,11 @@ class TripEntry extends Component {
           placeholder="여행 이름을 입력하세요."
           >{ tripName }</h3>
         <div className="trip-entry-buttons">
-          <label for="lock">{ lock ? this.lockMessage : this.unlockMessage }</label>
-          <button className="trip-entry-lock" onClick={onClickLock} name="lock">{lock ? "자물쇠 잠김" : "자물쇠 풀림"}</button>
+          <label>{ lock ? this.lockMessage : this.unlockMessage }</label>
+          <button className="trip-entry-lock" onClick={onClickLock}>{lock ? "자물쇠 잠김" : "자물쇠 풀림"}</button>
+          { !lock && (
+            <button className="trip-entry-remove" onClick={onClickRemove}>여행 삭제</button>
+          )}
         </div>
         <div className="trip-entry-body">
           <div className="trip-entry-pics">
