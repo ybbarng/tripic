@@ -190,6 +190,7 @@ class TripList extends Component {
                   suppressContentEditableWarning={true}
                   onKeyDown={this.onKeyDownTripName}
                   onKeyUp={this.onKeyUpTripName}
+                  placeholder="여행 이름을 입력하세요."
                   >{ selectedTrip.message || selectedTrip.name }</h3>
                 <div className="triplist-modal-trips-entry-body">
                   <div className="triplist-modal-trips-entry-pics">

@@ -66,6 +66,13 @@
   display: inline-block;
 }
 
+.triplist-modal-trips-entry-title[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block;
+  color: #bf4a3d;
+  opacity: 0.5;
+}
+
 .triplist-modal-trips-entry-body {
   display: flex;
   direction: horizontal;
