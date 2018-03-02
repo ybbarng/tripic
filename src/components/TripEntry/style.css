@@ -23,14 +23,12 @@
 }
 
 .trip-entry-body {
-  display: flex;
-  direction: horizontal;
+  position: relative;
 }
 
 .trip-entry-pics {
   background-color: #eee;
-  height: 216px;
-  flex-grow: 1;
+  width: 100%;
 }
 
 .trip-entry-pics-entry {
@@ -50,16 +48,20 @@
 }
 
 .trip-entry-dropzone {
-  width: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   outline: 2px dashed #92b0b3;
   outline-offset: -5px;
   padding: 60px 20px;
-  background-color: #eff9fc;
+  background-color: rgba(239, 249, 252, 0.9);
 }
 
 .trip-entry-dropzone-active {
   outline: 2px dashed #04d65b;
-  background-color: #d7e2e5;
+  background-color: rgba(215, 226, 229, 0.9);
 }
 
 .trip-entry-dropzone-reject {
