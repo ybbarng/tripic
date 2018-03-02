@@ -40,6 +40,15 @@
   margin: 3px;
 }
 
+.trip-entry-no-pics {
+  height: 216px;
+  line-height: 216px;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+}
+
 .trip-entry-dropzone {
   width: 150px;
   outline: 2px dashed #92b0b3;
