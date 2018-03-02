@@ -50,6 +50,15 @@ app.put('/api/trip/:tripId', (req, res) => {
     res.status(200).send({
       message: 'Trip name is updated'
     });
+  }).catch((error) => {
+    console.log(error);
+    let errorMessage = '';
+    if (error.code === 'ER_DUP_ENTRY') {
+      errorMessage = 'Duplicate entry';
+    }
+    res.status(400).send({
+      error: errorMessage
+    });
   });
 });
 

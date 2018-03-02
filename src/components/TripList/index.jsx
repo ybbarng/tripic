@@ -77,7 +77,8 @@ class TripList extends Component {
     });
   }
 
-  changeTripName = (tripId, name) => {
+  changeTripName = (tripId, name, target) => {
+    const trip = this.getTripById(tripId);
     return putApi(
       `trip/${tripId}`,
       {
@@ -85,11 +86,12 @@ class TripList extends Component {
         'Content-Type': 'application/json'
       },
       JSON.stringify({ name })).then((body) => {
-        const trip = this.getTripById(tripId);
         const newTrips = editElement(this.state.trips, trip, { name });
         this.setState({
           trips: newTrips
         });
+      }).catch((err) => {
+        target.textContent = trip.name;
       });
   };
 
@@ -106,7 +108,8 @@ class TripList extends Component {
       if (this.state.selectedTripId) {
         this.changeTripName(
           this.state.selectedTripId,
-          event.target.textContent);
+          event.target.textContent,
+          event.target);
       }
     }
   };
