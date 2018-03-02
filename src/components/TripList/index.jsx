@@ -136,19 +136,19 @@ class TripList extends Component {
   onKeyUpTripName = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();
-      event.target.blur();
       if (!this.state.selectedTripId) {
+        this.setState();
         return;
       }
+      const newTripName = event.target.textContent;
+      if (!newTripName) {
+        return;
+      }
+      event.target.blur();
       if (this.state.selectedTripId === this.newTripId) {
-        this.createTrip(
-          event.target.textContent,
-          event.target);
+        this.createTrip(newTripName, event.target);
       } else {
-        this.changeTripName(
-          this.state.selectedTripId,
-          event.target.textContent,
-          event.target);
+        this.changeTripName(this.state.selectedTripId, newTripName, event.target);
       }
     }
   };
