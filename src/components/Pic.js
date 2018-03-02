@@ -14,13 +14,10 @@ class Pic {
         pic.datetime = info.datetime;
         pic.latitude = info.latitude;
         pic.longitude = info.longitude;
+        pic.image_src = image.preview;
         return pic;
       });
     });
-  }
-
-  get location() {
-    return [this.longitude, this.latitude];
   }
 }
 

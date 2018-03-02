@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature, Popup, RotationControl, ZoomControl } from "react-mapbox-gl";
 import Config from '../../config';
+import { getLocation } from '../../utils';
 import './style.css';
 
 const Mapbox = ReactMapboxGL({
@@ -15,7 +16,7 @@ class Map extends Component {
 
     const createMarker = (pic, i) => (
       <Feature
-        coordinates={pic.location}
+        coordinates={getLocation(pic)}
         onClick={onClickMarker.bind(null, pic)}
         onMouseEnter={onMouseEnterMarker.bind(null, pic)}
         onMouseLeave={onMouseLeaveMarker.bind(null, pic)}
@@ -53,20 +54,20 @@ class Map extends Component {
             },
             "circle-color": '#9302f4'
           }}>
-          { pics.map(createMarker) }
+          { pics && pics.map(createMarker) }
         </Layer>
         { clickedPic &&
           <Popup
-            coordinates={clickedPic.location}
+            coordinates={getLocation(clickedPic)}
             >
-            <img className="mapbox-popup-image" src={clickedPic.image.preview} />
+            <img className="mapbox-popup-image" src={clickedPic.image_src} />
           </Popup>
         }
         { hoveredPic &&
           <Popup
-            coordinates={hoveredPic.location}
+            coordinates={getLocation(hoveredPic)}
             >
-            <img className="mapbox-popup-image" src={hoveredPic.image.preview} />
+            <img className="mapbox-popup-image" src={hoveredPic.image_src} />
           </Popup>
         }
       </Mapbox>

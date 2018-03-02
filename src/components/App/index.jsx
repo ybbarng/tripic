@@ -3,7 +3,7 @@ import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
 import TripList from '../TripList';
-import { editElement, getApi } from '../../utils';
+import { editElement, getApi, getLocation } from '../../utils';
 
 class App extends Component {
   constructor() {
@@ -49,7 +49,7 @@ class App extends Component {
     if (this.state.clickedPic === null ||
         this.state.clickedPic !== clickedPic) {
       this.setState({
-        center: clickedPic.location,
+        center: getLocation(clickedPic),
         zoom: [11],
         clickedPic
       });

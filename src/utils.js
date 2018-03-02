@@ -83,6 +83,10 @@ const editElement = (array, element, newEntry) => {
   return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
 };
 
+const getLocation = (object) => {
+  return [object.longitude, object.latitude];
+};
+
 export {
   convertDMStoDD,
   getImageInfo,
@@ -91,4 +95,5 @@ export {
   postApi,
   putApi,
   deleteApi,
+  getLocation,
 };
