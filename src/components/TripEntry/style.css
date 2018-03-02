@@ -21,8 +21,11 @@
 }
 
 .trip-entry-buttons label {
-  font-size: 10px;
+  font-size: 12px;
   vertical-align: bottom;
+  color: #555;
+  margin-right: 10px;
+  margin-top: 2px;
 }
 
 .trip-entry-lock {
@@ -30,6 +33,16 @@
   height: 28px;
   padding: 3px;
   vertical-align: bottom;
+  cursor: pointer;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #AAA;
+  background-color: rgb(221, 221, 221);
+}
+
+.trip-entry-lock:hover {
+  background-color: rgb(200, 200, 200);
 }
 
 .trip-entry-lock-image {
@@ -73,6 +86,11 @@
   outline-offset: -5px;
   padding: 60px 20px;
   background-color: rgba(239, 249, 252, 0.9);
+  cursor: pointer;
+}
+
+.trip-entry-dropzone:hover {
+  background-color: rgba(219, 229, 232, 0.9);
 }
 
 .trip-entry-dropzone-active {
@@ -113,5 +131,11 @@
   cursor: pointer;
   border: 1px solid #d9534f;
   border-radius:4px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin-top: 7px;
 }
 
+.trip-entry-remove:hover {
+  background-color: #ca443e;
+}
