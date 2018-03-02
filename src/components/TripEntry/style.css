@@ -107,11 +107,11 @@
 
 .trip-entry-remove {
   float: right;
-  height: 28px;
-  padding: 3px 6px;
-  background-color: #ffb7b7;
-  border-color: #ff0000;
-  vertical-align: bottom;
-  color: #840000;
+  padding: 6px 12px;
+  background-color: #d9534f;
+  color: white;
+  cursor: pointer;
+  border: 1px solid #d9534f;
+  border-radius:4px;
 }
 
