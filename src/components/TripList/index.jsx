@@ -5,7 +5,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.css';
 import Pic from '../Pic';
-import { editElement, getApi, putApi } from '../../utils';
+import { editElement, getApi, postApi, putApi } from '../../utils';
 
 class TripList extends Component {
   constructor() {
@@ -14,6 +14,9 @@ class TripList extends Component {
       trips: [],
       selectedTripId: null
     }
+    this.newTripId = Number.MAX_SAFE_INTEGER;
+    this.newTripName = '새 여행 추가';
+    this.newTripMessage = '새 여행을 추가하려면 이 문구를 수정하세요.';
   }
 
   componentDidMount = () => {
@@ -27,6 +30,12 @@ class TripList extends Component {
   };
 
   updateTrips = (trips) => {
+    trips.push({
+      id: this.newTripId,
+      name: this.newTripName,
+      message: this.newTripMessage
+    });
+    trips.sort((a, b) => (b.id - a.id));
     this.setState({
       trips
     });
@@ -80,6 +89,26 @@ class TripList extends Component {
     });
   }
 
+  createTrip = (name, target) => {
+    return postApi(
+      `trip`,
+      {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      JSON.stringify({ name })).then((body) => {
+        const newTrips = this.state.trips.slice();
+        newTrips.push(body);
+        newTrips.sort((a, b) => (b.id - a.id));
+        this.setState({
+          trips: newTrips,
+          selectedTripId: body.id
+        });
+      }).catch((err) => {
+        target.textContent = this.newTripMessage;
+      });
+  };
+
   changeTripName = (tripId, name, target) => {
     const trip = this.getTripById(tripId);
     return putApi(
@@ -108,7 +137,14 @@ class TripList extends Component {
     if (event.keyCode === 13) {
       event.preventDefault();
       event.target.blur();
-      if (this.state.selectedTripId) {
+      if (!this.state.selectedTripId) {
+        return;
+      }
+      if (this.state.selectedTripId === this.newTripId) {
+        this.createTrip(
+          event.target.textContent,
+          event.target);
+      } else {
         this.changeTripName(
           this.state.selectedTripId,
           event.target.textContent,
@@ -154,7 +190,7 @@ class TripList extends Component {
                   suppressContentEditableWarning={true}
                   onKeyDown={this.onKeyDownTripName}
                   onKeyUp={this.onKeyUpTripName}
-                  >{ selectedTrip.name }</h3>
+                  >{ selectedTrip.message || selectedTrip.name }</h3>
                 <div className="triplist-modal-trips-entry-body">
                   <div className="triplist-modal-trips-entry-pics">
                   {

@@ -28,6 +28,27 @@ app.get('/api/trips.json', (req, res) => {
   });
 });
 
+app.post('/api/trip', (req, res) => {
+  const body = req.body;
+  database.createTrip(null, {
+    name: body.name
+  }).then((response) => {
+    res.status(200).send({
+      id: response.insertId,
+      name: body.name
+    });
+  }).catch((error) => {
+    console.log(error);
+    let errorMessage = '';
+    if (error.code === 'ER_DUP_ENTRY') {
+      errorMessage = 'Duplicate entry';
+    }
+    res.status(400).send({
+      error: errorMessage
+    });
+  });
+});
+
 app.put('/api/trip/:tripId', (req, res) => {
   if (!req.params.tripId) {
     res.status(400).send({

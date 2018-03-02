@@ -67,6 +67,10 @@ const getApi = (url) => {
   return requestApi(url, 'get');
 };
 
+const postApi = (url, headers, body) => {
+  return requestApi(url, 'post', headers, body);
+};
+
 const putApi = (url, headers, body) => {
   return requestApi(url, 'put', headers, body);
 };
@@ -80,5 +84,6 @@ export {
   getImageInfo,
   editElement,
   getApi,
+  postApi,
   putApi,
 };
