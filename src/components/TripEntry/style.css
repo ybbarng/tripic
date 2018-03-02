@@ -37,16 +37,6 @@
   height: 20px;
 }
 
-.trip-entry-remove {
-  height: 28px;
-  padding: 3px 6px;
-  margin-left: 5px;
-  background-color: #ffb7b7;
-  border-color: #ff0000;
-  vertical-align: bottom;
-  color: #840000;
-}
-
 .trip-entry-body {
   position: relative;
 }
@@ -113,3 +103,14 @@
   padding: 0;
   margin: 0;
 }
+
+.trip-entry-remove {
+  float: right;
+  height: 28px;
+  padding: 3px 6px;
+  background-color: #ffb7b7;
+  border-color: #ff0000;
+  vertical-align: bottom;
+  color: #840000;
+}
+

@@ -32,9 +32,6 @@ class TripEntry extends Component {
               alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
               />
           </button>
-          { !lock && (
-            <button className="trip-entry-remove" onClick={onClickRemove}>&#10006; 여행 삭제</button>
-          )}
         </div>
         <div className="trip-entry-body">
           <div className="trip-entry-pics">
@@ -62,6 +59,9 @@ class TripEntry extends Component {
             </Dropzone>
             )}
         </div>
+        { !lock && (
+          <button className="trip-entry-remove" onClick={onClickRemove}>&#10006; 여행 삭제</button>
+        )}
       </div>
     )
   }
