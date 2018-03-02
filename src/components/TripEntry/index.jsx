@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import './style.css';
+import lockImage from '../../assets/lock.png';
+import unlockImage from '../../assets/unlock.png';
 
 class TripEntry extends Component {
   constructor() {
@@ -23,7 +25,13 @@ class TripEntry extends Component {
           >{ tripName }</h3>
         <div className="trip-entry-buttons">
           <label>{ lock ? this.lockMessage : this.unlockMessage }</label>
-          <button className="trip-entry-lock" onClick={onClickLock}>{lock ? "자물쇠 잠김" : "자물쇠 풀림"}</button>
+          <button className="trip-entry-lock" onClick={onClickLock}>
+            <img
+              className="trip-entry-lock-image"
+              src={ lock ? lockImage : unlockImage }
+              alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
+              />
+          </button>
           { !lock && (
             <button className="trip-entry-remove" onClick={onClickRemove}>여행 삭제</button>
           )}

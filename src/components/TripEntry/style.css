@@ -15,11 +15,25 @@
 
 .trip-entry-buttons {
   float: right;
-  margin-top: 2.5em;
+  margin-top: 1.8em;
+  height: 30px;
+  line-height: 30px;
+}
+
+.trip-entry-lock {
+  width: 28px;
+  height: 28px;
+  padding: 3px;
+}
+
+.trip-entry-lock-image {
+  width: 20px;
+  height: 20px;
 }
 
 .trip-entry-buttons label {
   font-size: 10px;
+  vertical-align: middle;
 }
 
 .trip-entry-body {
