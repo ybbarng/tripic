@@ -66,6 +66,9 @@ class TripList extends Component {
   };
 
   onChangeTrip = (tripOption) => {
+    if (!tripOption) {
+      return;
+    }
     this.setState({
       selectedTripId: tripOption.value
     });
