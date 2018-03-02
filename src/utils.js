@@ -1,9 +1,19 @@
 import EXIF from 'exif-js';
+import moment from 'moment';
 
 // Degree-Minute-Second to Decimal Degrees
 const convertDMStoDD = (degrees, minutes, seconds, direction) => {
   return (['N', 'E'].includes(direction) ? 1 : -1 ) *
     degrees + (1 / 60) * minutes + (1 / 3600) * seconds;
+};
+
+const convertTiffDateTimeFormat = (tiffDateTime) => {
+  const datetime = moment(tiffDateTime, 'YYYY:MM:DD HH:mm:ss');
+  if (datetime.isValid()) {
+    return datetime;
+  } else {
+    return null;
+  }
 };
 
 // Run in callback of EXIF.getData()
@@ -35,7 +45,8 @@ const getImageInfo = (image) => {
       reject();
     }
     EXIF.getData(image, () => {
-      const datetime = EXIF.getTag(image, 'DateTimeOriginal');
+      const tiffDateTime = EXIF.getTag(image, 'DateTimeOriginal');
+      const datetime = tiffDateTime ? convertTiffDateTimeFormat(tiffDateTime) : null;
       const latitude = getLatitude(image);
       const longitude = getLongitude(image);
       resolve({

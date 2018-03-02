@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
@@ -21,12 +22,20 @@ class App extends Component {
 
   componentDidMount = () => {
     this.getPics()
+      .then(this.convertPics)
       .then(this.concatPics)
       .catch(err => console.log(err));
   };
 
   getPics = () => {
     return getApi('pics.json');
+  };
+
+  convertPics = (pics) => {
+    return pics.map((pic) => {
+      pic.datetime = moment(pic.datetime, 'YY-MM-DD HH:mm:ss');
+      return pic;
+    });
   };
 
   concatPics = (newPics) => {
