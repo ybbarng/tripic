@@ -33,7 +33,7 @@ class TripEntry extends Component {
               />
           </button>
           { !lock && (
-            <button className="trip-entry-remove" onClick={onClickRemove}>여행 삭제</button>
+            <button className="trip-entry-remove" onClick={onClickRemove}>&#10006; 여행 삭제</button>
           )}
         </div>
         <div className="trip-entry-body">

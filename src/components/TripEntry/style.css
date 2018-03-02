@@ -20,10 +20,16 @@
   line-height: 30px;
 }
 
+.trip-entry-buttons label {
+  font-size: 10px;
+  vertical-align: bottom;
+}
+
 .trip-entry-lock {
   width: 28px;
   height: 28px;
   padding: 3px;
+  vertical-align: bottom;
 }
 
 .trip-entry-lock-image {
@@ -31,9 +37,14 @@
   height: 20px;
 }
 
-.trip-entry-buttons label {
-  font-size: 10px;
-  vertical-align: middle;
+.trip-entry-remove {
+  height: 28px;
+  padding: 3px 6px;
+  margin-left: 5px;
+  background-color: #ffb7b7;
+  border-color: #ff0000;
+  vertical-align: bottom;
+  color: #840000;
 }
 
 .trip-entry-body {
