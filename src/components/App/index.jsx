@@ -1,10 +1,11 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import moment from 'moment';
 import './style.css';
 import Map from '../Map';
 import Pic from '../Pic';
 import TripList from '../TripList';
-import { editElement, getApi, getLocation } from '../../utils';
+import { editElement, getLocation } from '../../utils';
 
 class App extends Component {
   constructor() {
@@ -21,14 +22,15 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.getPics()
-      .then(this.convertPics)
-      .then(this.concatPics)
-      .catch(err => console.log(err));
+    this.getPics();
   };
 
   getPics = () => {
-    return getApi('pics.json');
+    axios.get('api/pics.json')
+      .then((response) => (
+        this.convertPics(response.data)
+      )) .then(this.concatPics)
+      .catch(err => console.log(err));
   };
 
   convertPics = (pics) => {

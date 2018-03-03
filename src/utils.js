@@ -58,38 +58,6 @@ const getImageInfo = (image) => {
   });
 };
 
-const requestApi = async (url, method, headers, body) => {
-  const response = await fetch(`/api/${url}`, {
-    method,
-    headers,
-    body
-  });
-  console.log(response);
-  const responseBody = await response.json();
-
-  if (response.status !== 200) {
-    throw Error(responseBody.message);
-  }
-  console.log(responseBody);
-  return responseBody;
-};
-
-const getApi = (url) => {
-  return requestApi(url, 'get');
-};
-
-const postApi = (url, headers, body) => {
-  return requestApi(url, 'post', headers, body);
-};
-
-const putApi = (url, headers, body) => {
-  return requestApi(url, 'put', headers, body);
-};
-
-const deleteApi = (url, headers, body) => {
-  return requestApi(url, 'delete', headers, body);
-};
-
 const editElement = (array, element, newEntry) => {
   return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
 };
@@ -102,9 +70,5 @@ export {
   convertDMStoDD,
   getImageInfo,
   editElement,
-  getApi,
-  postApi,
-  putApi,
-  deleteApi,
   getLocation,
 };

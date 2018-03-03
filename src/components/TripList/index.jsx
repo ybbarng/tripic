@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Select from 'react-select';
@@ -7,7 +8,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import './style.css';
 import TripEntry from '../TripEntry';
 import Pic from '../Pic';
-import { editElement, getApi, postApi, putApi, deleteApi } from '../../utils';
+import { editElement } from '../../utils';
 
 class TripList extends Component {
   constructor() {
@@ -23,13 +24,14 @@ class TripList extends Component {
   }
 
   componentDidMount = () => {
-    this.getTrips()
-      .then(this.updateTrips)
-      .catch(err => console.log(err));
+    this.getTrips();
   };
 
   getTrips = () => {
-    return getApi('trips.json');
+    axios.get('/api/trips.json')
+      .then((response) => {
+        this.updateTrips(response.data);
+      }).catch(err => console.log(err));
   };
 
   updateTrips = (trips) => {
@@ -75,12 +77,7 @@ class TripList extends Component {
     if (!trip) {
       return;
     }
-    return deleteApi(
-      `trip/${trip.id}`,
-      {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      }).then((body) => {
+    return axios.delete(`api/trip/${trip.id}`).then((response) => {
         const newTrips = this.state.trips.slice();
         const index = newTrips.indexOf(trip);
         if (index < 0) {
@@ -137,19 +134,14 @@ class TripList extends Component {
   }
 
   createTrip = (name, target) => {
-    return postApi(
-      `trip`,
-      {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      JSON.stringify({ name })).then((body) => {
+    return axios.post('/api/trip', { name }).then((response) => {
+        console.log(response);
         const newTrips = this.state.trips.slice();
-        newTrips.push(body);
+        newTrips.push(response.data);
         newTrips.sort((a, b) => (b.id - a.id));
         this.setState({
           trips: newTrips,
-          selectedTripId: body.id
+          selectedTripId: response.data.id
         });
       }).catch((err) => {
         target.textContent = this.newTripMessage;
@@ -158,13 +150,7 @@ class TripList extends Component {
 
   changeTripName = (tripId, name, target) => {
     const trip = this.getTripById(tripId);
-    return putApi(
-      `trip/${tripId}`,
-      {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      JSON.stringify({ name })).then((body) => {
+    return axios.put(`api/trip/${tripId}`, { name }).then((response) => {
         const newTrips = editElement(this.state.trips, trip, { name });
         this.setState({
           trips: newTrips
