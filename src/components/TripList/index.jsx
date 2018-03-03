@@ -68,15 +68,34 @@ class TripList extends Component {
       if (!trip.pics) {
         return resolve();
       }
+      const picsToUpload = trip.pics.filter((pic) => (pic.id === null));
+      if (!picsToUpload) {
+        return resolve();
+      }
       this.setState({
         isUploading: true
       });
-      setTimeout(() => {
+      const uploaders = picsToUpload.map((pic) => {
+        const formData = new FormData();
+        formData.append('trip_id', pic.trip_id);
+        formData.append('datetime', pic.datetime);
+        formData.append('latitude', pic.latitude);
+        formData.append('longitude', pic.longitude);
+        formData.append('image', pic.image);
+        return axios.post('/api/pic', formData).then((response) => {
+          const index = trip.pics.findIndex((el) => (el.image === pic.image));
+          trip.pics[index].id = response.data.id;
+        }).catch(err => console.log(err));
+      });
+      axios.all(uploaders).then(() => {
+        const newTrips = editElement(this.state.trips, trip, { pics: trip.pics });
+        console.log(newTrips);
         this.setState({
+          trips: newTrips,
           isUploading: false
         });
         resolve();
-      }, 2000);
+      });
     });
   };
 
@@ -183,7 +202,6 @@ class TripList extends Component {
 
   createTrip = (name, target) => {
     return axios.post('/api/trip', { name }).then((response) => {
-        console.log(response);
         const newTrips = this.state.trips.slice();
         newTrips.push(response.data);
         newTrips.sort((a, b) => (b.id - a.id));

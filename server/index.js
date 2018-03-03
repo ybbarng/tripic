@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const Database = require('./database');
 require('dotenv').config();
 
@@ -8,6 +9,7 @@ const port = process.env.PORT || 3001;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+const multipartParser = multer();
 
 const database = new Database();
 database.createTables();
@@ -110,6 +112,14 @@ app.delete('/api/trip/:tripId', (req, res) => {
       error: errorMessage
     });
   });
+});
+
+app.post('/api/pic', multipartParser.single('image'), (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
+    res.status(200).send({
+      id: 1234145
+    });
 });
 
 app.listen(port, () => {
