@@ -16,13 +16,13 @@ app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello from Express' });
 });
 
-app.get('/api/pics.json', (req, res) => {
+app.get('/api/pics', (req, res) => {
   database.readPics().then((row) => {
     res.send(row);
   });
 });
 
-app.get('/api/trips.json', (req, res) => {
+app.get('/api/trips', (req, res) => {
   database.readTrips().then((row) => {
     res.send(row);
   });

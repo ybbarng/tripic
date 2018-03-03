@@ -28,7 +28,7 @@ class TripList extends Component {
   };
 
   getTrips = () => {
-    axios.get('/api/trips.json')
+    axios.get('/api/trips')
       .then((response) => {
         this.updateTrips(response.data);
       }).catch(err => console.log(err));

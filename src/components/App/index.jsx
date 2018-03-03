@@ -26,7 +26,7 @@ class App extends Component {
   };
 
   getPics = () => {
-    axios.get('api/pics.json')
+    axios.get('api/pics')
       .then((response) => (
         this.convertPics(response.data)
       )) .then(this.concatPics)
