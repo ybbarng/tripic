@@ -56,10 +56,23 @@ class TripList extends Component {
     });
   };
 
-  onClickLock = () => {
-    this.setState({
-      lock: !this.state.lock
+  lockTrip = () => {
+    return new Promise((resolve, reject) => {
+      this.setState({
+        lock: true
+      });
+      resolve();
     });
+  };
+
+  unlockTrip = () => {
+    this.setState({
+      lock: false
+    });
+  };
+
+  onClickLock = () => {
+    this.state.lock ? this.unlockTrip() : this.lockTrip();
   };
 
   onClickRemove = () => {
@@ -94,7 +107,7 @@ class TripList extends Component {
   };
 
   onDrop = (tripId, images, rejects) => {
-    Promise.all(Pic.fromImages(images))
+    Promise.all(Pic.convertImageToPic(images, tripId))
     .then((newPics) => {
       this.appendPicsToTrip(tripId, newPics);
     });
@@ -121,9 +134,10 @@ class TripList extends Component {
     if (!tripOption) {
       return;
     }
-    this.setState({
-      selectedTripId: tripOption.value,
-      lock: true
+    this.lockTrip().then(() => {
+      this.setState({
+        selectedTripId: tripOption.value
+      });
     });
   };
 
