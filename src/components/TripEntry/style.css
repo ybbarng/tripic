@@ -13,14 +13,14 @@
   opacity: 0.5;
 }
 
-.trip-entry-buttons {
+.trip-entry-right {
   float: right;
   margin-top: 1.8em;
   height: 30px;
   line-height: 30px;
 }
 
-.trip-entry-buttons label {
+.trip-entry-right-message {
   font-size: 12px;
   vertical-align: bottom;
   color: #555;

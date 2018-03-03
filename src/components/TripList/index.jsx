@@ -16,7 +16,8 @@ class TripList extends Component {
     this.state = {
       trips: [],
       selectedTripId: null,
-      lock: true
+      lock: true,
+      isUploading: false
     }
     this.newTripId = Number.MAX_SAFE_INTEGER;
     this.newTripName = '새 여행 추가';
@@ -56,16 +57,49 @@ class TripList extends Component {
     });
   };
 
+  uploadNewPics = () => {
+    return new Promise((resolve, reject) => {
+      console.log('uploadNewPics');
+      const tripId = this.state.selectedTripId;
+      if (!tripId) {
+        return resolve();
+      }
+      const trip = this.getTripById(tripId);
+      if (!trip.pics) {
+        return resolve();
+      }
+      this.setState({
+        isUploading: true
+      });
+      setTimeout(() => {
+        this.setState({
+          isUploading: false
+        });
+        resolve();
+      }, 2000);
+    });
+  };
+
   lockTrip = () => {
     return new Promise((resolve, reject) => {
+      const isUnlocked = !this.state.lock;
       this.setState({
         lock: true
       });
+      if (isUnlocked) {
+        this.uploadNewPics().then(resolve);
+        return;
+      }
       resolve();
+    }).then(() => {
+      console.log('after lockTrip');
     });
   };
 
   unlockTrip = () => {
+    if (this.state.isUploading) {
+      return;
+    }
     this.setState({
       lock: false
     });
@@ -201,7 +235,7 @@ class TripList extends Component {
   };
 
   render() {
-    const { trips, modalVisible, selectedTripId, lock } = this.state;
+    const { trips, modalVisible, selectedTripId, lock, isUploading } = this.state;
     const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
     const tripOptions = trips && trips.map((trip) => ({
       value: trip.id,
@@ -226,6 +260,7 @@ class TripList extends Component {
             value={selectedTripId}
             onChange={this.onChangeTrip}
             options={tripOptions}
+            disabled={!lock || isUploading}
             >
           </Select>
           {
@@ -234,6 +269,7 @@ class TripList extends Component {
                 tripId={selectedTrip.id}
                 pics={selectedTrip.pics}
                 lock={lock}
+                isUploading={isUploading}
                 onKeyDownTripName={this.onKeyDownTripName}
                 onKeyUpTripName={this.onKeyUpTripName}
                 tripName={selectedTrip.message || selectedTrip.name}

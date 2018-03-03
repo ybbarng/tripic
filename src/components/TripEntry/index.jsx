@@ -9,29 +9,45 @@ class TripEntry extends Component {
     super();
     this.lockMessage = "변경하려면 자물쇠를 클릭하세요.";
     this.unlockMessage = "더 이상 변경하지 않으려면 자물쇠를 클릭하세요.";
+    this.uploadingMessage = "사진을 업로드하는 중에는 여행을 변경할 수 없습니다.";
   }
 
   render() {
-    const { tripId, pics, lock, onKeyDownTripName, onKeyUpTripName, tripName, onClickLock, onClickRemove, onDrop } = this.props;
+    const { tripId, pics, lock, isUploading, onKeyDownTripName, onKeyUpTripName, tripName, onClickLock, onClickRemove, onDrop } = this.props;
+    const message = (() => {
+      if (isUploading) {
+        return this.uploadingMessage;
+      } else if (lock) {
+        return this.lockMessage;
+      } else {
+        return this.unlockMessage;
+      }
+    })();
+    const nameEditable = isUploading ? "false" : "true";
     return (
       <div className="trip-entry">
         <h3
           className="trip-entry-title"
-          contentEditable="true"
+          contentEditable={nameEditable}
           suppressContentEditableWarning={true}
           onKeyDown={onKeyDownTripName}
           onKeyUp={onKeyUpTripName}
           placeholder="여행 이름을 입력하세요."
           >{ tripName }</h3>
-        <div className="trip-entry-buttons">
-          <label>{ lock ? this.lockMessage : this.unlockMessage }</label>
-          <button className="trip-entry-lock" onClick={onClickLock}>
-            <img
-              className="trip-entry-lock-image"
-              src={ lock ? lockImage : unlockImage }
-              alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
-              />
-          </button>
+        <div className="trip-entry-right">
+          <span className="trip-entry-right-message">{ message }</span>
+          { !isUploading && (
+            <button
+              className="trip-entry-lock"
+              onClick={onClickLock}
+              >
+              <img
+                className="trip-entry-lock-image"
+                src={ lock ? lockImage : unlockImage }
+                alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
+                />
+            </button>
+          )}
         </div>
         <div className="trip-entry-body">
           <div className="trip-entry-pics">
