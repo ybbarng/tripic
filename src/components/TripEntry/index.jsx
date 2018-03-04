@@ -53,7 +53,7 @@ class TripEntry extends Component {
           <div className="trip-entry-pics">
           {
             pics && pics.map((pic, i) => (
-              <img className="trip-entry-pics-entry" src={pic.image.preview} key={i}/>
+              <img className="trip-entry-pics-entry" src={pic.image_src} key={i}/>
             ))
           }
           {

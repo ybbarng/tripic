@@ -21,6 +21,12 @@ class Pic {
       });
     });
   }
+
+  updateDbInfo = (id, image_src) => {
+    this.id = id;
+    window.URL.revokeObjectURL(this.image.preview);
+    this.image_src = image_src;
+  };
 }
 
 export default Pic;

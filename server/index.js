@@ -118,7 +118,8 @@ app.post('/api/pic', multipartParser.single('image'), (req, res) => {
   console.log(req.file);
   console.log(req.body);
     res.status(200).send({
-      id: 1234145
+      id: 1234145,
+      image_src: 'http://via.placeholder.com/80x45'
     });
 });
 

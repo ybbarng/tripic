@@ -84,7 +84,7 @@ class TripList extends Component {
         formData.append('image', pic.image);
         return axios.post('/api/pic', formData).then((response) => {
           const index = trip.pics.findIndex((el) => (el.image === pic.image));
-          trip.pics[index].id = response.data.id;
+          trip.pics[index].updateDbInfo(response.data.id, response.data.image_src);
         }).catch(err => console.log(err));
       });
       axios.all(uploaders).then(() => {
