@@ -191,6 +191,7 @@ class TripList extends Component {
       this.setState({
         selectedTripId: tripOption.value
       });
+      this.getPicsOfTrip(tripOption.value);
     });
   };
 
@@ -224,6 +225,17 @@ class TripList extends Component {
       }).catch((err) => {
         target.textContent = trip.name;
       });
+  };
+
+  getPicsOfTrip = (tripId) => {
+    return axios.get(`api/pics`, { params: { trip_id: tripId }}).then((response) => {
+      const trip = this.getTripById(tripId);
+      const pics = trip.pics? trip.pics.filter((pic) => pic.id === null).concat(response.data) : response.data;
+      const newTrips = editElement(this.state.trips, trip, { pics });
+      this.setState({
+        trips: newTrips
+      });
+    }).catch(err => console.log(err));
   };
 
   onKeyDownTripName = (event) => {

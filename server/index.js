@@ -27,9 +27,15 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.get('/api/pics', (req, res) => {
-  database.readPics().then((row) => {
-    res.send(row);
-  });
+  if (req.query.trip_id) {
+    database.readPicsOfTrip(null, req.query.trip_id).then((row) => {
+      res.send(row);
+    });
+  } else {
+    database.readPics(null).then((row) => {
+      res.send(row);
+    });
+  }
 });
 
 app.get('/api/trips', (req, res) => {
