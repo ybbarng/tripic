@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import './style.css';
 import Map from '../Map';
-import Pic from '../Pic';
 import TripList from '../TripList';
-import { editElement, getLocation } from '../../utils';
+import { getLocation } from '../../utils';
 
 class App extends Component {
   constructor() {
