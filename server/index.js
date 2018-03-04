@@ -1,5 +1,6 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary');
+const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 const Database = require('./database');
@@ -14,6 +15,12 @@ const multipartParser = multer();
 
 const database = new Database();
 database.createTables();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello from Express' });
@@ -118,15 +125,44 @@ app.delete('/api/trip/:tripId', (req, res) => {
 app.post('/api/pic', multipartParser.single('image'), (req, res) => {
   console.log(req.file);
   console.log(req.body);
+  let cloudinaryUrl = 'http://via.placeholder.com/80x45';
   sharp(req.file.buffer)
     .resize(1280, 720)
     .toBuffer()
     .then((data) => {
+      return new Promise((resolve, reject) => {
+        cloudinary.v2.uploader.upload_stream(null, (error, result) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve(result);
+        }).end(data);
+      });
+    }).catch((error) => {
+      res.status(500).send({
+        error
+      });
+    }).then((result) => {
+      cloudinaryUrl = result.secure_url;
+      return database.createPic(null, {
+        trip_id: req.body.trip_id,
+        datetime: req.body.datetime,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        image_url: cloudinaryUrl
+      });
+    }).then((response) => {
+      res.status(200).send({
+        id: response.insertId,
+        image_src: cloudinaryUrl
+      });
+    }).catch((error) => {
+      console.log(error);
+      res.status(500).send({
+        error
+      });
     });
-  res.status(200).send({
-    id: 1234145,
-    image_src: 'http://via.placeholder.com/80x45'
-  });
 });
 
 app.listen(port, () => {
