@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const sharp = require('sharp');
 const Database = require('./database');
 require('dotenv').config();
 
@@ -117,10 +118,15 @@ app.delete('/api/trip/:tripId', (req, res) => {
 app.post('/api/pic', multipartParser.single('image'), (req, res) => {
   console.log(req.file);
   console.log(req.body);
-    res.status(200).send({
-      id: 1234145,
-      image_src: 'http://via.placeholder.com/80x45'
+  sharp(req.file.buffer)
+    .resize(1280, 720)
+    .toBuffer()
+    .then((data) => {
     });
+  res.status(200).send({
+    id: 1234145,
+    image_src: 'http://via.placeholder.com/80x45'
+  });
 });
 
 app.listen(port, () => {
