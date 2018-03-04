@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature, Popup, RotationControl, ZoomControl } from "react-mapbox-gl";
 import Config from '../../config';
-import { getLocation } from '../../utils';
+import { getImageSrc, getLocation } from '../../utils';
 import './style.css';
 
 const Mapbox = ReactMapboxGL({
@@ -60,14 +60,14 @@ class Map extends Component {
           <Popup
             coordinates={getLocation(clickedPic)}
             >
-            <img className="mapbox-popup-image" src={clickedPic.image_src} />
+            <img className="mapbox-popup-image" src={getImageSrc(clickedPic, 80, 45)} />
           </Popup>
         }
         { hoveredPic &&
           <Popup
             coordinates={getLocation(hoveredPic)}
             >
-            <img className="mapbox-popup-image" src={hoveredPic.image_src} />
+            <img className="mapbox-popup-image" src={getImageSrc(hoveredPic, 80, 45)} />
           </Popup>
         }
       </Mapbox>
