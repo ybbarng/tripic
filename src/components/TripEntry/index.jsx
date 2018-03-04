@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import './style.css';
 import lockImage from '../../assets/lock.png';
 import unlockImage from '../../assets/unlock.png';
+import { getImageSrc } from '../../utils';
 
 class TripEntry extends Component {
   constructor() {
@@ -53,7 +54,7 @@ class TripEntry extends Component {
           <div className="trip-entry-pics">
           {
             pics && pics.map((pic, i) => (
-              <img className="trip-entry-pics-entry" src={pic.image_src} key={i}/>
+              <img className="trip-entry-pics-entry" src={getImageSrc(pic, 96, 54)} key={i}/>
             ))
           }
           {

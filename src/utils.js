@@ -1,5 +1,6 @@
 import EXIF from 'exif-js';
 import moment from 'moment';
+import Config from './config';
 
 // Degree-Minute-Second to Decimal Degrees
 const convertDMStoDD = (degrees, minutes, seconds, direction) => {
@@ -66,9 +67,18 @@ const getLocation = (object) => {
   return [object.longitude, object.latitude];
 };
 
+const getImageSrc = (pic, width, height, cropMode='c_scale') => {
+  if (pic.image_src.startsWith('blob:')) {
+    return pic.image_src;
+  }
+  const sizeParam = (Number.isInteger(width) && Number.isInteger(height)) ? `/w_${width},h_${height},${cropMode}` : '';
+  return `${Config.cloudUrlHeader}${sizeParam}${pic.image_src}`;
+};
+
 export {
   convertDMStoDD,
   getImageInfo,
   editElement,
   getLocation,
+  getImageSrc
 };

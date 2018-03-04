@@ -144,7 +144,8 @@ app.post('/api/pic', multipartParser.single('image'), (req, res) => {
         error
       });
     }).then((result) => {
-      cloudinaryUrl = result.secure_url;
+      cloudinaryUrl = result.secure_url
+        .replace(process.env.REACT_APP_CLOUD_URL_HEADER, '');
       return database.createPic(null, {
         trip_id: req.body.trip_id,
         datetime: req.body.datetime,
