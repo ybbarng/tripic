@@ -78,7 +78,7 @@ class TripList extends Component {
       const uploaders = picsToUpload.map((pic) => {
         const formData = new FormData();
         formData.append('trip_id', pic.trip_id);
-        formData.append('datetime', pic.datetime);
+        formData.append('datetime', pic.datetime.format('YYYY-MM-DD HH:mm:ss'));
         formData.append('latitude', pic.latitude);
         formData.append('longitude', pic.longitude);
         formData.append('image', pic.image);
