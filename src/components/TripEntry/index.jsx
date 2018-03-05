@@ -71,7 +71,7 @@ class TripEntry extends Component {
             ))
           }
           {
-            !pics && <p className="trip-entry-no-pics">이 여행에 등록된 사진이 없습니다.</p>
+            (!pics || pics.length === 0) && <p className="trip-entry-no-pics">이 여행에 등록된 사진이 없습니다.</p>
           }
           </div>
           { !lock && (
