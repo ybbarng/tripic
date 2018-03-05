@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS Pics (
     datetime DATETIME NOT NULL,
     location POINT NOT NULL,
     image_url VARCHAR(100) NOT NULL,
+    description VARCHAR(200) NOT NULL,
     FOREIGN KEY (trip_id) REFERENCES Trips (id),
     SPATIAL INDEX (location)
 );

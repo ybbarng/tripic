@@ -54,7 +54,12 @@ class TripEntry extends Component {
           <div className="trip-entry-pics">
           {
             pics && pics.map((pic, i) => (
-              <img className="trip-entry-pics-entry" src={getImageSrc(pic, 96, 54)} key={i}/>
+              <img
+                className="trip-entry-pics-entry"
+                src={getImageSrc(pic, 96, 54)}
+                alt={pic.description || ''}
+                key={i}
+                />
             ))
           }
           {

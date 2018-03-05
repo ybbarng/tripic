@@ -60,14 +60,22 @@ class Map extends Component {
           <Popup
             coordinates={getLocation(clickedPic)}
             >
-            <img className="mapbox-popup-image" src={getImageSrc(clickedPic, 80, 45)} />
+            <img
+              className="mapbox-popup-image"
+              src={getImageSrc(clickedPic, 80, 45)}
+              alt={clickedPic.description || ''}
+              />
           </Popup>
         }
         { hoveredPic &&
           <Popup
             coordinates={getLocation(hoveredPic)}
             >
-            <img className="mapbox-popup-image" src={getImageSrc(hoveredPic, 80, 45)} />
+            <img
+              className="mapbox-popup-image"
+              src={getImageSrc(hoveredPic, 80, 45)}
+              alt={hoveredPic.description || ''}
+              />
           </Popup>
         }
       </Mapbox>
