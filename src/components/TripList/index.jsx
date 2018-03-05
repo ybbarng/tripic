@@ -108,13 +108,11 @@ class TripList extends Component {
       });
       if (isUnlocked) {
         this.saveTripNewTitle()
-          .then(() => (this.uploadNewPics()))
+          .then(this.uploadNewPics)
           .then(resolve);
         return;
       }
       resolve();
-    }).then(() => {
-      console.log('after lockTrip');
     });
   };
 
@@ -161,6 +159,7 @@ class TripList extends Component {
         newTrips.splice(index, 1);
         this.setState({
           trips: newTrips,
+          lock: true,
           selectedTripId: null
         });
       }).catch((err) => {
@@ -216,19 +215,28 @@ class TripList extends Component {
 
   createTrip = (name) => {
     return axios.post('/api/trip', { name }).then((response) => {
-        const newTrips = this.state.trips.slice();
-        newTrips.push(response.data);
-        newTrips.sort((a, b) => (b.id - a.id));
-        this.setState({
-          trips: newTrips,
-          selectedTripId: response.data.id
+      const tempTrip = this.getTripById(this.state.selectedTripId);
+      const newTrip = response.data;
+      if (tempTrip.pics) {
+        newTrip.pics = tempTrip.pics.map((pic) => {
+          pic.trip_id = newTrip.id;
+          return pic;
         });
-      }).catch((err) => {
-        console.log(err);
-        this.setState({
-          tripTitleEditText: '잘못된 이름입니다.'
-        });
+        tempTrip.pics = [];
+      }
+      const newTrips = this.state.trips.slice();
+      newTrips.push(newTrip);
+      newTrips.sort((a, b) => (b.id - a.id));
+      this.setState({
+        trips: newTrips,
+        selectedTripId: response.data.id
       });
+    }).catch((err) => {
+      console.log(err);
+      this.setState({
+        tripTitleEditText: '잘못된 이름입니다.'
+      });
+    });
   };
 
   changeTripName = (tripId, name) => {
@@ -276,9 +284,11 @@ class TripList extends Component {
         return;
       }
       if (this.state.selectedTripId === this.newTripId) {
-        return this.createTrip(newTripName);
+        this.createTrip(newTripName)
+          .then(resolve);
       } else {
-        return this.changeTripName(this.state.selectedTripId, newTripName);
+        this.changeTripName(this.state.selectedTripId, newTripName)
+          .then(resolve);
       }
     });
   };
