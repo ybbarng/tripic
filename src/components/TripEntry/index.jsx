@@ -24,7 +24,7 @@ class TripEntry extends Component {
         return this.unlockMessage;
       }
     })();
-    const nameEditable = isUploading ? "false" : "true";
+    const nameEditable = lock || isUploading ? "false" : "true";
     return (
       <div className="trip-entry">
         <h3
