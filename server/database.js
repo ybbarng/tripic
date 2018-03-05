@@ -105,7 +105,8 @@ class Database {
     connection = connection || this.pool;
     return connection.query(
       `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as latitude, ST_X(location) as longitude, image_url as image_src
-      FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id`);
+      FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id
+      ORDER BY datetime ASC`);
   }
 
   readPicsOfTrip(connection, tripId) {
@@ -113,7 +114,8 @@ class Database {
     return connection.query(
       `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as latitude, ST_X(location) as longitude, image_url as image_src
       FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id
-      WHERE Pics.trip_id = ?`, [tripId]);
+      WHERE Pics.trip_id = ?
+      ORDER BY datetime ASC`, [tripId]);
   }
 
   updatePic(connection, patch) {
