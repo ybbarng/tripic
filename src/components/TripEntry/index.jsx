@@ -14,7 +14,7 @@ class TripEntry extends Component {
   }
 
   render() {
-    const { tripId, pics, lock, isUploading, onKeyDownTripName, onKeyUpTripName, tripName, onClickLock, onClickRemove, onDrop } = this.props;
+    const { tripId, tripName, tripTitleEditText, pics, lock, isUploading, onChangeTripTitle, onClickLock, onClickRemove, onDrop } = this.props;
     const message = (() => {
       if (isUploading) {
         return this.uploadingMessage;
@@ -24,17 +24,25 @@ class TripEntry extends Component {
         return this.unlockMessage;
       }
     })();
-    const nameEditable = lock || isUploading ? "false" : "true";
     return (
       <div className="trip-entry">
-        <h3
-          className="trip-entry-title"
-          contentEditable={nameEditable}
-          suppressContentEditableWarning={true}
-          onKeyDown={onKeyDownTripName}
-          onKeyUp={onKeyUpTripName}
-          placeholder="여행 이름을 입력하세요."
-          >{ tripName }</h3>
+        {
+          lock && (
+            <h3
+              className="trip-entry-title"
+              placeholder="여행 이름을 입력하세요."
+              >{ tripName }</h3>
+        )}
+        {
+          !lock && (
+            <input type="text"
+              className="trip-entry-title-edit"
+              value={tripTitleEditText}
+              disabled={lock || isUploading}
+              placeholder="여행 이름을 입력하세요."
+              onChange={onChangeTripTitle}
+              />
+        )}
         <div className="trip-entry-right">
           <span className="trip-entry-right-message">{ message }</span>
           { !isUploading && (

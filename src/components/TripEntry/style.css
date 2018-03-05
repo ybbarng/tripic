@@ -1,16 +1,10 @@
-.trip-entry-title {
+.trip-entry-title, .trip-entry-title-edit {
   font-size: 1.3em;
   font-weight: bold;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   display: inline-block;
-}
-
-.trip-entry-title[contenteditable=true]:empty:before {
-  content: attr(placeholder);
-  display: block;
-  color: #bf4a3d;
-  opacity: 0.5;
+  width: 300px;
 }
 
 .trip-entry-right {

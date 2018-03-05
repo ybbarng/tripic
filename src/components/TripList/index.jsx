@@ -17,7 +17,8 @@ class TripList extends Component {
       trips: [],
       selectedTripId: null,
       lock: true,
-      isUploading: false
+      isUploading: false,
+      tripTitleEditText: '',
     }
     this.newTripId = Number.MAX_SAFE_INTEGER;
     this.newTripName = '새 여행 추가';
@@ -61,7 +62,7 @@ class TripList extends Component {
     return new Promise((resolve, reject) => {
       console.log('uploadNewPics');
       const tripId = this.state.selectedTripId;
-      if (!tripId) {
+      if (!tripId || tripId === this.newTripId) {
         return resolve();
       }
       const trip = this.getTripById(tripId);
@@ -106,7 +107,9 @@ class TripList extends Component {
         lock: true
       });
       if (isUnlocked) {
-        this.uploadNewPics().then(resolve);
+        this.saveTripNewTitle()
+          .then(() => (this.uploadNewPics()))
+          .then(resolve);
         return;
       }
       resolve();
@@ -116,11 +119,17 @@ class TripList extends Component {
   };
 
   unlockTrip = () => {
+    const selectedTripId = this.state.selectedTripId;
+    if (!selectedTripId) {
+      return;
+    }
     if (this.state.isUploading) {
       return;
     }
+    const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
     this.setState({
-      lock: false
+      lock: false,
+      tripTitleEditText: selectedTrip.message || selectedTrip.name
     });
   };
 
@@ -205,7 +214,7 @@ class TripList extends Component {
     });
   }
 
-  createTrip = (name, target) => {
+  createTrip = (name) => {
     return axios.post('/api/trip', { name }).then((response) => {
         const newTrips = this.state.trips.slice();
         newTrips.push(response.data);
@@ -215,11 +224,14 @@ class TripList extends Component {
           selectedTripId: response.data.id
         });
       }).catch((err) => {
-        target.textContent = this.newTripMessage;
+        console.log(err);
+        this.setState({
+          tripTitleEditText: '잘못된 이름입니다.'
+        });
       });
   };
 
-  changeTripName = (tripId, name, target) => {
+  changeTripName = (tripId, name) => {
     const trip = this.getTripById(tripId);
     return axios.put(`api/trip/${tripId}`, { name }).then((response) => {
         const newTrips = editElement(this.state.trips, trip, { name });
@@ -227,7 +239,10 @@ class TripList extends Component {
           trips: newTrips
         });
       }).catch((err) => {
-        target.textContent = trip.name;
+        console.log(err);
+        this.setState({
+          tripTitleEditText: trip.name
+        });
       });
   };
 
@@ -242,34 +257,34 @@ class TripList extends Component {
     }).catch(err => console.log(err));
   };
 
-  onKeyDownTripName = (event) => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-    }
+  onChangeTripTitle = (event) => {
+    this.setState({
+      tripTitleEditText: event.target.value
+    });
   };
 
-  onKeyUpTripName = (event) => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
+  saveTripNewTitle = () => {
+    return new Promise((resolve, reject) => {
       if (!this.state.selectedTripId) {
         this.setState();
+        resolve();
         return;
       }
-      const newTripName = event.target.textContent;
-      if (!newTripName) {
+      const newTripName = this.state.tripTitleEditText;
+      if (!newTripName || newTripName === this.newTripMessage) {
+        resolve();
         return;
       }
-      event.target.blur();
       if (this.state.selectedTripId === this.newTripId) {
-        this.createTrip(newTripName, event.target);
+        return this.createTrip(newTripName);
       } else {
-        this.changeTripName(this.state.selectedTripId, newTripName, event.target);
+        return this.changeTripName(this.state.selectedTripId, newTripName);
       }
-    }
+    });
   };
 
   render() {
-    const { trips, modalVisible, selectedTripId, lock, isUploading } = this.state;
+    const { trips, tripTitleEditText, modalVisible, selectedTripId, lock, isUploading } = this.state;
     const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
     const tripOptions = trips && trips.map((trip) => ({
       value: trip.id,
@@ -301,12 +316,12 @@ class TripList extends Component {
             selectedTrip && (
               <TripEntry
                 tripId={selectedTrip.id}
+                tripName={selectedTrip.message || selectedTrip.name}
+                tripTitleEditText={tripTitleEditText}
                 pics={selectedTrip.pics}
                 lock={lock}
                 isUploading={isUploading}
-                onKeyDownTripName={this.onKeyDownTripName}
-                onKeyUpTripName={this.onKeyUpTripName}
-                tripName={selectedTrip.message || selectedTrip.name}
+                onChangeTripTitle={this.onChangeTripTitle}
                 onClickLock={this.onClickLock}
                 onClickRemove={this.onClickRemove}
                 onDrop={this.onDrop}
