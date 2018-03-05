@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "express": "^4.16.2",
     "nodemon": "^1.15.1"
   },
   "proxy": "http://localhost:3001/"
