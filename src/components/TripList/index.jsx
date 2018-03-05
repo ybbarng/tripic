@@ -191,6 +191,10 @@ class TripList extends Component {
       this.setState({
         selectedTripId: tripOption.value
       });
+      if (tripOption.value === this.newTripId) {
+        this.unlockTrip();
+        return;
+      }
       this.getPicsOfTrip(tripOption.value);
     });
   };
