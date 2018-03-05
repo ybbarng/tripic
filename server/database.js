@@ -104,14 +104,14 @@ class Database {
   readPics(connection) {
     connection = connection || this.pool;
     return connection.query(
-      `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as longitude, ST_X(location) as latitude, image_url as image_src
+      `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as latitude, ST_X(location) as longitude, image_url as image_src
       FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id`);
   }
 
   readPicsOfTrip(connection, tripId) {
     connection = connection || this.pool;
     return connection.query(
-      `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as longitude, ST_X(location) as latitude, image_url as image_src
+      `SELECT Pics.id as id, trip_id, Trips.name as trip_name, datetime, ST_Y(location) as latitude, ST_X(location) as longitude, image_url as image_src
       FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id
       WHERE Pics.trip_id = ?`, [tripId]);
   }
