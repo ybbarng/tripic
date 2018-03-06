@@ -17,6 +17,23 @@ const convertTiffDateTimeFormat = (tiffDateTime) => {
   }
 };
 
+const parseDateTimeFromFileName = (name) => {
+  const iphoneFileNameFormat = 'YYYYMMDD_HHmmss.jpg';
+  const androidFileNameFormat = 'YYYY-MM-DD HH.mm.ss.jpg';
+  const datetime = (() => {
+    if (name.startsWith('IMG_')) {
+      // Bug: moment can't parsing G_YYYYMMDD
+      return moment(name.substring(4), iphoneFileNameFormat);
+    } else {
+      return moment(name, androidFileNameFormat);
+    }
+  })();
+  if (datetime.isValid()) {
+    return datetime;
+  }
+  return null;
+}
+
 // Run in callback of EXIF.getData()
 const getAxisInfo = (image, axisName) => {
   if (!['Longitude', 'Latitude'].includes(axisName)) {
@@ -40,6 +57,7 @@ const getLongitude = (image) => {
   return getAxisInfo(image, 'Longitude');
 };
 
+
 const getImageInfo = (image) => {
   return new Promise((resolve, reject) => {
     if (image.type !== 'image/jpeg') {
@@ -47,7 +65,14 @@ const getImageInfo = (image) => {
     }
     EXIF.getData(image, () => {
       const tiffDateTime = EXIF.getTag(image, 'DateTimeOriginal');
-      const datetime = tiffDateTime ? convertTiffDateTimeFormat(tiffDateTime) : null;
+      const datetime = (() => {
+        if (tiffDateTime) {
+          return convertTiffDateTimeFormat(tiffDateTime);
+        } else if (image.name) {
+          return parseDateTimeFromFileName(image.name);
+        }
+        return null;
+      })();
       const latitude = getLatitude(image);
       const longitude = getLongitude(image);
       resolve({
