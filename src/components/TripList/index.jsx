@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Select from 'react-select';
 import { confirmAlert } from 'react-confirm-alert';
+import LightBox from 'react-image-lightbox';
 import 'react-select/dist/react-select.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './style.css';
 import TripEntry from '../TripEntry';
 import Pic from '../Pic';
-import { editElement } from '../../utils';
+import { editElement, getImageSrc } from '../../utils';
 
 class TripList extends Component {
   constructor() {
@@ -19,6 +20,8 @@ class TripList extends Component {
       lock: true,
       isUploading: false,
       tripTitleEditText: '',
+      isLightBoxOpen: false,
+      lightBoxIndex: 0
     }
     this.newTripId = Number.MAX_SAFE_INTEGER;
     this.newTripName = '새 여행 추가';
@@ -293,9 +296,30 @@ class TripList extends Component {
     });
   };
 
+  onClickPic = (i) => {
+    console.log(i);
+    this.setState({
+      isLightBoxOpen: true,
+      lightBoxIndex: i
+    });
+  };
+
+  onCloseLightBox = () => {
+    this.setState({ isLightBoxOpen: false });
+  };
+
+  getNextImageIndex = (pics, i) => {
+    return (i + 1) % pics.length;
+  };
+
+  getPrevImageIndex = (pics, i) => {
+    return (i + pics.length - 1) % pics.length;
+  };
+
   render() {
-    const { trips, tripTitleEditText, modalVisible, selectedTripId, lock, isUploading } = this.state;
+    const { trips, tripTitleEditText, modalVisible, selectedTripId, lock, isUploading, isLightBoxOpen, lightBoxIndex } = this.state;
     const selectedTrip = selectedTripId && this.getTripById(selectedTripId);
+    const selectedPics = (selectedTrip !== null) ? selectedTrip.pics : null;
     const tripOptions = trips && trips.map((trip) => ({
       value: trip.id,
       label: trip.name
@@ -333,12 +357,33 @@ class TripList extends Component {
                 isUploading={isUploading}
                 onChangeTripTitle={this.onChangeTripTitle}
                 onClickLock={this.onClickLock}
+                onClickPic={this.onClickPic}
                 onClickRemove={this.onClickRemove}
                 onDrop={this.onDrop}
                 />
             )
           }
         </Modal>
+        {
+          isLightBoxOpen && selectedPics && (
+            <LightBox
+              mainSrc={getImageSrc(selectedPics[lightBoxIndex])}
+              nextSrc={getImageSrc(selectedPics[this.getNextImageIndex(selectedPics, lightBoxIndex)])}
+              prevSrc={getImageSrc(selectedPics[this.getPrevImageIndex(selectedPics, lightBoxIndex)])}
+              onCloseRequest={this.onCloseLightBox}
+              onMoveNextRequest={() => {
+                this.setState({
+                  lightBoxIndex: this.getNextImageIndex(selectedPics, lightBoxIndex)
+                });
+              }}
+              onMovePrevRequest={() => {
+                this.setState({
+                  lightBoxIndex: this.getPrevImageIndex(selectedPics, lightBoxIndex)
+                });
+              }}
+              />
+          )
+        }
       </div>
     );
   }

@@ -14,7 +14,7 @@ class TripEntry extends Component {
   }
 
   render() {
-    const { tripId, tripName, tripTitleEditText, pics, lock, isUploading, onChangeTripTitle, onClickLock, onClickRemove, onDrop } = this.props;
+    const { tripId, tripName, tripTitleEditText, pics, lock, isUploading, onChangeTripTitle, onClickLock, onClickPic, onClickRemove, onDrop } = this.props;
     const message = (() => {
       if (isUploading) {
         return this.uploadingMessage;
@@ -68,6 +68,7 @@ class TripEntry extends Component {
                 className="trip-entry-pics-entry"
                 src={getImageSrc(pic, 96, 54)}
                 alt={pic.description || ''}
+                onClick={onClickPic.bind(null, i)}
                 key={i}
                 />
             ))

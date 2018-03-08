@@ -69,6 +69,7 @@
   -webkit-box-shadow: 1px 1px 4px #ccc;
   box-shadow: 1px 1px 4px #ccc;
   background: white;
+  cursor: pointer;
 }
 
 .trip-entry-no-pics {
