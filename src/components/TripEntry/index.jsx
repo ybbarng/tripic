@@ -26,37 +26,39 @@ class TripEntry extends Component {
     })();
     return (
       <div className="trip-entry">
-        {
-          lock && (
-            <h3
-              className="trip-entry-title"
-              placeholder="여행 이름을 입력하세요."
-              >{ tripName }</h3>
-        )}
-        {
-          !lock && (
-            <input type="text"
-              className="trip-entry-title-edit"
-              value={tripTitleEditText}
-              disabled={lock || isUploading}
-              placeholder="여행 이름을 입력하세요."
-              onChange={onChangeTripTitle}
-              />
-        )}
-        <div className="trip-entry-right">
-          <span className="trip-entry-right-message">{ message }</span>
-          { !isUploading && (
-            <button
-              className="trip-entry-lock"
-              onClick={onClickLock}
-              >
-              <img
-                className="trip-entry-lock-image"
-                src={ lock ? lockImage : unlockImage }
-                alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
-                />
-            </button>
+        <div className="trip-entry-header">
+          {
+            lock && (
+              <h3
+                className="trip-entry-header-title"
+                placeholder="여행 이름을 입력하세요."
+                >{ tripName }</h3>
           )}
+          {
+            !lock && (
+              <input type="text"
+                className="trip-entry-header-title-edit"
+                value={tripTitleEditText}
+                disabled={lock || isUploading}
+                placeholder="여행 이름을 입력하세요."
+                onChange={onChangeTripTitle}
+                />
+          )}
+          <div className="trip-entry-header-right">
+            <span className="trip-entry-header-right-message">{ message }</span>
+            { !isUploading && (
+              <button
+                className="trip-entry-header-right-lock"
+                onClick={onClickLock}
+                >
+                <img
+                  className="trip-entry-header-right-lock-image"
+                  src={ lock ? lockImage : unlockImage }
+                  alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
+                  />
+              </button>
+            )}
+          </div>
         </div>
         <div className="trip-entry-body">
           <div className="trip-entry-pics">

@@ -1,20 +1,25 @@
-.trip-entry-title, .trip-entry-title-edit {
+.trip-entry-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.trip-entry-header-title, .trip-entry-header-title-edit {
   font-size: 1.3em;
   font-weight: bold;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   display: inline-block;
-  width: 300px;
+  flex-grow: 1;
+  margin-right: 1.5em;
 }
 
-.trip-entry-right {
-  float: right;
+.trip-entry-header-right {
   margin-top: 1.8em;
-  height: 30px;
   line-height: 30px;
+  text-align: right;
 }
 
-.trip-entry-right-message {
+.trip-entry-header-right-message {
   font-size: 12px;
   vertical-align: bottom;
   color: #555;
@@ -22,7 +27,7 @@
   margin-top: 2px;
 }
 
-.trip-entry-lock {
+.trip-entry-header-right-lock {
   width: 28px;
   height: 28px;
   padding: 3px;
@@ -35,11 +40,11 @@
   background-color: rgb(221, 221, 221);
 }
 
-.trip-entry-lock:hover {
+.trip-entry-header-right-lock:hover {
   background-color: rgb(200, 200, 200);
 }
 
-.trip-entry-lock-image {
+.trip-entry-header-right-lock-image {
   width: 20px;
   height: 20px;
 }
@@ -132,4 +137,15 @@
 
 .trip-entry-remove:hover {
   background-color: #ca443e;
+}
+
+@media only screen and (max-width: 695px) {
+  .trip-entry-header {
+    flex-direction: column;
+  }
+
+  .trip-entry-header-title, .trip-entry-header-title-edit {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
 }
