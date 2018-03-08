@@ -64,6 +64,11 @@
   height: 54px;
   padding: 2px;
   margin: 3px;
+  border: 1px solid #b4bfcd;
+  -moz-box-shadow: 1px 1px 4px #ccc;
+  -webkit-box-shadow: 1px 1px 4px #ccc;
+  box-shadow: 1px 1px 4px #ccc;
+  background: white;
 }
 
 .trip-entry-no-pics {
