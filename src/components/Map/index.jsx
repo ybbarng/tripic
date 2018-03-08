@@ -36,12 +36,14 @@ class Map extends Component {
         }}>
         <ZoomControl
           style={{
-            top: "50px"
+            top: "60px",
+            left: "20px"
           }}
           position="top-left" />
         <RotationControl
           style={{
-            top: "102px"
+            top: "112px",
+            left: "20px"
           }}
           position="top-left" />
         <Layer

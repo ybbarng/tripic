@@ -17,10 +17,9 @@ body{
 
 .App-header {
   position: absolute;
-  top: 10;
-  left: 10;
+  top: 20px;
+  left: 20px;
   z-index: 100;
-  margin: 10px;
 }
 
 .App-title {
