@@ -31,7 +31,7 @@ class Map extends Component {
         center={center}
         zoom={zoom}
         containerStyle={{
-          height: "100vh",
+          height: "100%",
           width: "100vw"
         }}>
         <ZoomControl
