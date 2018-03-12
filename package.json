@@ -15,6 +15,7 @@
     "promise-mysql": "^3.2.1",
     "react": "^16.2.0",
     "react-confirm-alert": "^1.0.8",
+    "react-device-detect": "^0.1.0",
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.8",
     "react-image-lightbox": "^4.5.0",

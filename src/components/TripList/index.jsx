@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { isMobile } from 'react-device-detect';
 import Modal from 'react-modal';
 import Select from 'react-select';
 import { confirmAlert } from 'react-confirm-alert';
@@ -344,6 +345,7 @@ class TripList extends Component {
             onChange={this.onChangeTrip}
             options={tripOptions}
             disabled={!lock || isUploading}
+            searchable={!isMobile}
             >
           </Select>
           {
