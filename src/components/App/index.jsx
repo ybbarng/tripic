@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import './style.css';
 import Map from '../Map';
-import TripList from '../TripList';
 import { getLocation } from '../../utils';
 
 class App extends Component {
@@ -101,8 +100,6 @@ class App extends Component {
         onClickMarker={this.onClickMarker}
         onMouseEnterMarker={this.onMouseEnterMarker}
         onMouseLeaveMarker={this.onMouseLeaveMarker}
-        />
-      <TripList
         />
     </div>
     );
