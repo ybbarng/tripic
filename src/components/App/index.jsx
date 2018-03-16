@@ -87,9 +87,9 @@ class App extends Component {
   render() {
     const { pics, center, zoom, clickedPic, hoveredPic } = this.state;
     return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="App-title">Tripic</h1>
+    <div className="app">
+      <header className="app-header">
+        <h1 className="app-title">Tripic</h1>
       </header>
       <Map
         pics={pics}

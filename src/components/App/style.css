@@ -10,24 +10,24 @@ body{
   height: 100%;
 }
 
-.App {
+.app {
   text-align: center;
   height: 100%;
 }
 
-.App-header {
+.app-header {
   position: absolute;
   top: 20px;
   left: 20px;
   z-index: 100;
 }
 
-.App-title {
+.app-title {
   font-size: 1.5em;
   color: #444;
   margin: 0;
 }
 
-.App-intro {
+.app-intro {
   font-size: large;
 }
