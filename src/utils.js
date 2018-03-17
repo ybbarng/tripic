@@ -84,8 +84,12 @@ const getImageInfo = (image) => {
   });
 };
 
+const editObject = (element, newElement) => {
+  return Object.assign({}, element, newElement);
+};
+
 const editElement = (array, element, newEntry) => {
-  return array.map((el) => ((el.id === element.id) ? Object.assign({}, el, newEntry) : el));
+  return array.map((el) => ((el.id === element.id) ? editObject(el, newEntry) : el));
 };
 
 const getLocation = (object) => {
@@ -103,6 +107,7 @@ const getImageSrc = (pic, width, height, cropMode='c_scale') => {
 export {
   convertDMStoDD,
   getImageInfo,
+  editObject,
   editElement,
   getLocation,
   getImageSrc
