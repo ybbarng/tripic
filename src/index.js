@@ -8,7 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
   <BrowserRouter>
-      <div>
+      <div className="route-wrapper">
         <Route exact path="/" component={App} />
         <Route path="/map" component={App} />
         <Route path="/admin" component={Admin} />
