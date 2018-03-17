@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
+import './style.css';
 import AdminTrip from '../AdminTrip';
 import * as api from '../../api';
 
@@ -96,6 +97,7 @@ class Admin extends Component {
     return (
       <div className="admin">
         <div className="admin-trips">
+        <h1 className="admin-trips-title">여행 목록</h1>
         { trips && trips.map((trip, i) => (
           <Link to={`/admin/${trip.id}`} className="admin-trips-item" key={i}>{ trip.name }</Link>
         ))}
