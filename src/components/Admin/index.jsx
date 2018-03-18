@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import './style.css';
 import AdminTrip from '../AdminTrip';
 import * as api from '../../api';
@@ -97,23 +98,29 @@ class Admin extends Component {
     return (
       <div className="admin">
         <div className="admin-trips">
-        <h1 className="admin-trips-title">여행 목록</h1>
-        { trips && trips.map((trip, i) => (
-          <Link to={`/admin/${trip.id}`} className="admin-trips-item" key={i}>{ trip.name }</Link>
-        ))}
+          <h1 className="admin-trips-title">여행 목록</h1>
+          <List component="nav">
+            { trips && trips.map((trip, i) => (
+              <Link className="admin-trips-item" to={`/admin/${trip.id}`} style={{ textDecoration: 'none' }} key={i}>
+                <ListItem button>
+                  <ListItemText primary={trip.name} />
+                </ListItem>
+              </Link>
+            ))}
+          </List>
         </div>
-        <div className="admin-body">
         <Route path="/admin/:tripId" render={(props) => {
           return (
-            <AdminTrip
-              trip={this.getTripById(props.match.params.tripId)}
-              onRenameTrip={this.onRenameTrip}
-              onDeleteTrip={this.onDeleteTrip}
-              {...props}
-            />
+            <div className="admin-body">
+              <AdminTrip
+                trip={this.getTripById(props.match.params.tripId)}
+                onRenameTrip={this.onRenameTrip}
+                onDeleteTrip={this.onDeleteTrip}
+                {...props}
+              />
+            </div>
           );}
         } />
-        </div>
       </div>
     );
   }
