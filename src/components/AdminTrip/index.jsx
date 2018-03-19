@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { Link, Route } from 'react-router-dom';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dropzone from 'react-dropzone';
 import LightBox from 'react-image-lightbox';
 import './style.css';
 import AlertDialog from '../AlertDialog';
+import AdminPic from '../AdminPic';
 import Pic from '../Pic';
 import * as api from '../../api';
 import lockImage from '../../assets/lock.png';
@@ -230,6 +232,35 @@ class AdminTrip extends Component {
     return (i + pics.length - 1) % pics.length;
   };
 
+  getPic = (tripId, picIndex) => {
+    if (typeof tripId === typeof '') {
+      tripId = parseInt(tripId, 10);
+      if (isNaN(tripId)) {
+        return null;
+      }
+    }
+    if (typeof picIndex === typeof '') {
+      picIndex = parseInt(picIndex, 10);
+      if (isNaN(picIndex)) {
+        return null;
+      }
+    }
+    const { trip, pics, tempPics } = this.state;
+    if (trip === null) {
+      return null;
+    }
+    if (trip.id !== tripId) {
+      return null;
+    }
+    console.log(tripId, picIndex);
+    if (picIndex < pics.length) {
+      return pics[picIndex];
+    } else if (picIndex < pics.length + tempPics.length) {
+      return tempPics[picIndex - pics.length];
+    } else {
+      return null;
+    }
+  };
 
   render() {
     const { fetching, trip, pics, tripTitleEditText, lock, isUploading, isLightBoxOpen, lightBoxIndex } = this.state;
@@ -250,96 +281,108 @@ class AdminTrip extends Component {
       );
     } else {
       return (
-        <div className="trip-entry">
-          <div className="trip-entry-header">
-            {
-              lock && (
-                <h3
-                  className="trip-entry-header-title"
-                  placeholder="여행 이름을 입력하세요."
-                  >{ trip.name }</h3>
-            )}
-            {
-              !lock && (
-                <input type="text"
-                  className="trip-entry-header-title-edit"
-                  value={tripTitleEditText}
-                  disabled={lock || isUploading}
-                  placeholder="여행 이름을 입력하세요."
-                  onChange={this.onChangeTripTitle}
-                  />
-            )}
-            <div className="trip-entry-header-right">
-              <span className="trip-entry-header-right-message">{ message }</span>
-              { !isUploading && (
-                <button
-                  className="trip-entry-header-right-lock"
-                  onClick={this.onClickLock}
-                  >
-                  <img
-                    className="trip-entry-header-right-lock-image"
-                    src={ lock ? lockImage : unlockImage }
-                    alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
-                    />
-                </button>
+        <div className="trip">
+          <div className="trip-entry">
+            <div className="trip-entry-header">
+              {
+                lock && (
+                  <h3
+                    className="trip-entry-header-title"
+                    placeholder="여행 이름을 입력하세요."
+                    >{ trip.name }</h3>
               )}
+              {
+                !lock && (
+                  <input type="text"
+                    className="trip-entry-header-title-edit"
+                    value={tripTitleEditText}
+                    disabled={lock || isUploading}
+                    placeholder="여행 이름을 입력하세요."
+                    onChange={this.onChangeTripTitle}
+                    />
+              )}
+              <div className="trip-entry-header-right">
+                <span className="trip-entry-header-right-message">{ message }</span>
+                { !isUploading && (
+                  <button
+                    className="trip-entry-header-right-lock"
+                    onClick={this.onClickLock}
+                    >
+                    <img
+                      className="trip-entry-header-right-lock-image"
+                      src={ lock ? lockImage : unlockImage }
+                      alt={ lock ? "자물쇠 잠김" : "자물쇠 풀림" }
+                      />
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="trip-entry-body">
-            <div className="trip-entry-pics">
-            {
-              pics && pics.map((pic, i) => (
-                <img
-                  className="trip-entry-pics-entry"
-                  src={getImageSrc(pic, 96, 54)}
-                  alt={pic.description || ''}
-                  onClick={this.onClickPic.bind(null, i)}
-                  key={i}
-                  />
-              ))
-            }
-            {
-              (!pics || pics.length === 0) && <p className="trip-entry-no-pics">이 여행에 등록된 사진이 없습니다.</p>
-            }
+            <div className="trip-entry-body">
+              <div className="trip-entry-pics">
+              {
+                pics && pics.map((pic, i) => (
+                  <img
+                    className="trip-entry-pics-entry"
+                    src={getImageSrc(pic, 96, 54)}
+                    alt={pic.description || ''}
+                    onClick={this.onClickPic.bind(null, i)}
+                    key={i}
+                    />
+                ))
+              }
+              {
+                (!pics || pics.length === 0) && <p className="trip-entry-no-pics">이 여행에 등록된 사진이 없습니다.</p>
+              }
+              </div>
+              { !lock && (
+                <Dropzone
+                  className="trip-entry-dropzone"
+                  activeClassName="trip-entry-dropzone-active"
+                  rejectClassName="trip-entry-dropzone-reject"
+                  accept="image/jpeg, image/png"
+                  onDrop={this.onDrop.bind(null, trip.id)}
+                  >
+                  <div className="trip-entry-dropzone-guide">
+                  <svg className="trip-entry-dropzone-guide-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"></path></svg>
+                    <p><strong>드래그</strong> 또는 <strong>클릭</strong>으로<br /> 사진 추가</p>
+                  </div>
+                </Dropzone>
+                )}
             </div>
             { !lock && (
-              <Dropzone
-                className="trip-entry-dropzone"
-                activeClassName="trip-entry-dropzone-active"
-                rejectClassName="trip-entry-dropzone-reject"
-                accept="image/jpeg, image/png"
-                onDrop={this.onDrop.bind(null, trip.id)}
-                >
-                <div className="trip-entry-dropzone-guide">
-                <svg className="trip-entry-dropzone-guide-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"></path></svg>
-                  <p><strong>드래그</strong> 또는 <strong>클릭</strong>으로<br /> 사진 추가</p>
-                </div>
-              </Dropzone>
-              )}
+              <button className="trip-entry-remove" onClick={this.onClickRemove}>&#10006; 여행 삭제</button>
+            )}
+            {
+              isLightBoxOpen && pics && (
+                <LightBox
+                  mainSrc={getImageSrc(pics[lightBoxIndex])}
+                  nextSrc={getImageSrc(pics[this.getNextImageIndex(pics, lightBoxIndex)])}
+                  prevSrc={getImageSrc(pics[this.getPrevImageIndex(pics, lightBoxIndex)])}
+                  onCloseRequest={this.onCloseLightBox}
+                  onMoveNextRequest={() => {
+                    this.setState({
+                      lightBoxIndex: this.getNextImageIndex(pics, lightBoxIndex)
+                    });
+                  }}
+                  onMovePrevRequest={() => {
+                    this.setState({
+                      lightBoxIndex: this.getPrevImageIndex(pics, lightBoxIndex)
+                    });
+                  }}
+                  />
+              )
+            }
           </div>
-          { !lock && (
-            <button className="trip-entry-remove" onClick={this.onClickRemove}>&#10006; 여행 삭제</button>
-          )}
-          {
-            isLightBoxOpen && pics && (
-              <LightBox
-                mainSrc={getImageSrc(pics[lightBoxIndex])}
-                nextSrc={getImageSrc(pics[this.getNextImageIndex(pics, lightBoxIndex)])}
-                prevSrc={getImageSrc(pics[this.getPrevImageIndex(pics, lightBoxIndex)])}
-                onCloseRequest={this.onCloseLightBox}
-                onMoveNextRequest={() => {
-                  this.setState({
-                    lightBoxIndex: this.getNextImageIndex(pics, lightBoxIndex)
-                  });
-                }}
-                onMovePrevRequest={() => {
-                  this.setState({
-                    lightBoxIndex: this.getPrevImageIndex(pics, lightBoxIndex)
-                  });
-                }}
+          <Route path="/admin/:tripId/:picIndex" render={(props) => {
+            return (
+              <div className="trip-pic">
+                <AdminPic
+                  pic={this.getPic(props.match.params.tripId, props.match.params.picIndex)}
+                  {...props}
                 />
-            )
-          }
+              </div>
+            );}
+          } />
         </div>
       )
     }
