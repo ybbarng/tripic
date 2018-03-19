@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dropzone from 'react-dropzone';
 import LightBox from 'react-image-lightbox';
 import './style.css';
+import AlertDialog from '../AlertDialog';
 import Pic from '../Pic';
 import * as api from '../../api';
 import lockImage from '../../assets/lock.png';
@@ -145,7 +145,7 @@ class AdminTrip extends Component {
   };
 
   onClickRemove = () => {
-    confirmAlert({
+    AlertDialog({
       title: '여행 삭제',
       message: '정말로 이 여행 항목을 삭제하시겠습니까?',
       confirmLabel: '삭제',
