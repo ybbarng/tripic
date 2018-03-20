@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dropzone from 'react-dropzone';
-import LightBox from 'react-image-lightbox';
 import './style.css';
 import AlertDialog from '../AlertDialog';
 import AdminPic from '../AdminPic';
@@ -23,9 +22,7 @@ class AdminTrip extends Component {
       tempPics: [],
       lock: true,
       isUploading: false,
-      tripTitleEditText: '',
-      isLightBoxOpen: false,
-      lightBoxIndex: 0
+      tripTitleEditText: ''
     }
     this.lockMessage = "변경하려면 자물쇠를 클릭하세요.";
     this.unlockMessage = "더 이상 변경하지 않으려면 자물쇠를 클릭하세요.";
@@ -71,7 +68,7 @@ class AdminTrip extends Component {
 
   componentWillReceiveProps = (newProps) => {
     var newTripId = newProps.match.params.tripId;
-    if (this.state.trip == null || this.state.trip.id !== newTripId) {
+    if (this.state.trip == null || this.state.trip.id + '' !== newTripId) {
       this.fetchAll(newTripId, newProps.trip);
     }
   }
@@ -212,18 +209,6 @@ class AdminTrip extends Component {
     });
   };
 
-  onClickPic = (i) => {
-    console.log(i);
-    this.setState({
-      isLightBoxOpen: true,
-      lightBoxIndex: i
-    });
-  };
-
-  onCloseLightBox = () => {
-    this.setState({ isLightBoxOpen: false });
-  };
-
   getNextImageIndex = (pics, i) => {
     return (i + 1) % pics.length;
   };
@@ -252,7 +237,6 @@ class AdminTrip extends Component {
     if (trip.id !== tripId) {
       return null;
     }
-    console.log(tripId, picIndex);
     if (picIndex < pics.length) {
       return pics[picIndex];
     } else if (picIndex < pics.length + tempPics.length) {
@@ -263,7 +247,7 @@ class AdminTrip extends Component {
   };
 
   render() {
-    const { fetching, trip, pics, tripTitleEditText, lock, isUploading, isLightBoxOpen, lightBoxIndex } = this.state;
+    const { fetching, trip, pics, tripTitleEditText, lock, isUploading } = this.state;
     const message = (() => {
       if (isUploading) {
         return this.uploadingMessage;
@@ -321,13 +305,13 @@ class AdminTrip extends Component {
               <div className="trip-entry-pics">
               {
                 pics && pics.map((pic, i) => (
-                  <img
-                    className="trip-entry-pics-entry"
-                    src={getImageSrc(pic, 96, 54)}
-                    alt={pic.description || ''}
-                    onClick={this.onClickPic.bind(null, i)}
-                    key={i}
-                    />
+                  <Link to={`/admin/${trip.id}/${i}`} key={i}>
+                    <img
+                      className="trip-entry-pics-entry"
+                      src={getImageSrc(pic, 96, 54)}
+                      alt={pic.description || ''}
+                      />
+                  </Link>
                 ))
               }
               {
@@ -352,26 +336,6 @@ class AdminTrip extends Component {
             { !lock && (
               <button className="trip-entry-remove" onClick={this.onClickRemove}>&#10006; 여행 삭제</button>
             )}
-            {
-              isLightBoxOpen && pics && (
-                <LightBox
-                  mainSrc={getImageSrc(pics[lightBoxIndex])}
-                  nextSrc={getImageSrc(pics[this.getNextImageIndex(pics, lightBoxIndex)])}
-                  prevSrc={getImageSrc(pics[this.getPrevImageIndex(pics, lightBoxIndex)])}
-                  onCloseRequest={this.onCloseLightBox}
-                  onMoveNextRequest={() => {
-                    this.setState({
-                      lightBoxIndex: this.getNextImageIndex(pics, lightBoxIndex)
-                    });
-                  }}
-                  onMovePrevRequest={() => {
-                    this.setState({
-                      lightBoxIndex: this.getPrevImageIndex(pics, lightBoxIndex)
-                    });
-                  }}
-                  />
-              )
-            }
           </div>
           <Route path="/admin/:tripId/:picIndex" render={(props) => {
             return (

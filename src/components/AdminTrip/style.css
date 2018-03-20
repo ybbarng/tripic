@@ -1,3 +1,17 @@
+.trip {
+  display: flex;
+  flex-direction: row;
+}
+
+.trip-entry {
+  flex-basis: fit-content;
+}
+
+.trip-pic {
+  width: 447px;
+  padding: 10px;
+}
+
 .trip-entry-header {
   display: flex;
   flex-direction: row;
