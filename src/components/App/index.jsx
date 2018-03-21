@@ -4,6 +4,7 @@ import moment from 'moment';
 import './style.css';
 import Map from '../Map';
 import { getLocation } from '../../utils';
+import logo from '../../assets/main_logo.png';
 
 class App extends Component {
   constructor() {
@@ -88,7 +89,7 @@ class App extends Component {
     return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">Tripic</h1>
+        <img src={logo} className="app-title" alt="Tripic" />
       </header>
       <Map
         pics={pics}
