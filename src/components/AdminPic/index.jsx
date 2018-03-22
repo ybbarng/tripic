@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature, RotationControl, ZoomControl } from "react-mapbox-gl";
 import Config from '../../config';
 import { getImageSrc, getLocation } from '../../utils';
+import './style.css';
 
 const Mapbox = ReactMapboxGL({
   accessToken: Config.mapboxAccessToken
@@ -78,10 +79,27 @@ class AdminPic extends Component {
     }
     return (
       <div className="pic">
-        <img src={getImageSrc(pic, 427, 240)} alt="사진 미리보기" />
-        {pic.datetime}
-        {pic.latitude}
-        {pic.longitude}
+        <img className="pic-image" src={getImageSrc(pic, 427, 240)} alt="사진 미리보기" />
+        <div className="pic-info">
+          <h2>사진 정보</h2>
+          <div className="pic-info">
+            <span className="pic-info-name">여행 이름</span>
+            <span className="pic-info-value">{pic.trip_name}</span>
+          </div>
+
+          <div className="pic-info">
+            <span className="pic-info-name">촬영 일시</span>
+            <span className="pic-info-value">{pic.datetime}</span>
+          </div>
+          <div className="pic-info">
+            <span className="pic-info-name">위도</span>
+            <span className="pic-info-value">{pic.latitude}</span>
+          </div>
+          <div className="pic-info">
+            <span className="pic-info-name">경도</span>
+            <span className="pic-info-value">{pic.longitude}</span>
+          </div>
+        </div>
         <Mapbox
           // eslint-disable-next-line
           style="mapbox://styles/mapbox/streets-v9"

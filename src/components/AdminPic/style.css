@@ -1,0 +1,14 @@
+.pic {
+  width: 427px;
+}
+
+.pic-image {
+  width: 427px;
+  height: 240px;
+}
+
+.pic-info-name:after {
+  content: ":";
+  margin-right: 3px;
+}
+
