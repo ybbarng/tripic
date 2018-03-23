@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dropzone from 'react-dropzone';
 import './style.css';
 import AlertDialog from '../AlertDialog';
+import AdminThumbnail from '../AdminThumbnail';
 import AdminPic from '../AdminPic';
 import Pic from '../Pic';
 import * as api from '../../api';
@@ -305,13 +306,12 @@ class AdminTrip extends Component {
               <div className="trip-entry-pics">
               {
                 pics && pics.map((pic, i) => (
-                  <Link to={`/admin/${trip.id}/${i}`} key={i}>
-                    <img
-                      className="trip-entry-pics-entry"
-                      src={getImageSrc(pic, 96, 54)}
-                      alt={pic.description || ''}
-                      />
-                  </Link>
+                  <AdminThumbnail
+                    src={getImageSrc(pic, 96, 54)}
+                    alt={pic.description || ''}
+                    linkTo={`/admin/${trip.id}/${i}`}
+                    key={i}
+                    />
                 ))
               }
               {

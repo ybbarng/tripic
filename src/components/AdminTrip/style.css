@@ -73,19 +73,6 @@
   min-height: 230px;
 }
 
-.trip-entry-pics-entry {
-  width: 96px;
-  height: 54px;
-  padding: 2px;
-  margin: 3px;
-  border: 1px solid #b4bfcd;
-  -moz-box-shadow: 1px 1px 4px #ccc;
-  -webkit-box-shadow: 1px 1px 4px #ccc;
-  box-shadow: 1px 1px 4px #ccc;
-  background: white;
-  cursor: pointer;
-}
-
 .trip-entry-no-pics {
   height: 216px;
   line-height: 216px;

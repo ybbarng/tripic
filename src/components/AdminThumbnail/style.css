@@ -1,0 +1,46 @@
+.thumbnail {
+  display: inline-block;
+  position: relative;
+  width: 96px;
+  height: 54px;
+  padding: 2px;
+  margin: 3px;
+  border: 1px solid #b4bfcd;
+  -moz-box-shadow: 1px 1px 4px #ccc;
+  -webkit-box-shadow: 1px 1px 4px #ccc;
+  box-shadow: 1px 1px 4px #ccc;
+  background: white;
+}
+
+.thumbnail-overlap {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 96px;
+  height: 54px;
+  display: flex;
+  background-color: #FFFFFF99;
+  text-align: center;
+}
+
+.thumbnail-overlap-detail {
+  height: 54px;
+  line-height: 54px;
+  font-size: 12px;
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.thumbnail-overlap-delete {
+  font: 20px/100% arial, sans-serif;
+  height: 54px;
+  line-height: 54px;
+  padding: 0;
+  color: #E53935;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #aaa;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-grow: 1;
+}
