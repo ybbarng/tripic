@@ -56,11 +56,26 @@ class AdminPic extends Component {
     });
   };
 
+  onDragMarker = (map, evt) => {
+    const { lngLat } = map;
+    const { pic } = this.state;
+    if (!pic) {
+      return;
+    }
+    pic.longitude = lngLat.lng;
+    pic.latitude = lngLat.lat;
+    this.setState({
+      pic
+    });
+  };
+
   createMarker = (pic) => {
     if (pic) {
       return (
         <Feature
           coordinates={pic.getLocation()}
+          draggable={true}
+          onDrag={this.onDragMarker}
           />
       );
     }
@@ -126,8 +141,8 @@ class AdminPic extends Component {
             id="marker"
             paint={{
               "circle-radius": {
-                "base": 5,
-                "stops":[[11, 5], [18, 20]],
+                "base": 10,
+                "stops":[[11, 10], [18, 30]],
               },
               "circle-color": '#9302f4'
             }}>
