@@ -56,17 +56,36 @@ class AdminPic extends Component {
     });
   };
 
-  onDragMarker = (map, evt) => {
-    const { lngLat } = map;
+  onChangeLatitude = (event) => {
+    const { pic } = this.state;
+    this.changePicLocation(event.target.value, pic.longitude, true);
+  };
+
+  onChangeLongitude = (event) => {
+    const { pic } = this.state;
+    this.changePicLocation(pic.latitude, event.target.value, true);
+  };
+
+  changePicLocation = (latitude, longitude, changeCenter) => {
     const { pic } = this.state;
     if (!pic) {
       return;
     }
-    pic.longitude = lngLat.lng;
-    pic.latitude = lngLat.lat;
+    pic.latitude = latitude;
+    pic.longitude = longitude;
     this.setState({
       pic
     });
+    if (changeCenter) {
+      this.setState({
+        center: pic.getLocation()
+      });
+    }
+  };
+
+  onDragMarker = (map, evt) => {
+    const { lngLat } = map;
+    this.changePicLocation(lngLat.lat, lngLat.lng);
   };
 
   createMarker = (pic) => {
@@ -94,7 +113,7 @@ class AdminPic extends Component {
     return (
       <div className="pic">
         <img className="pic-image" src={pic.getImageSrc(427, 240)} alt="사진 미리보기" />
-        <div className="pic-info">
+        <form className="pic-info">
           <h2>사진 정보</h2>
           <div className="pic-info">
             <span className="pic-info-name">여행 이름</span>
@@ -107,13 +126,23 @@ class AdminPic extends Component {
           </div>
           <div className="pic-info">
             <span className="pic-info-name">위도</span>
-            <span className="pic-info-value">{pic.latitude}</span>
+            <input
+              className="pic-info-value"
+              type="number"
+              value={pic.latitude}
+              onChange={this.onChangeLatitude}
+              />
           </div>
           <div className="pic-info">
             <span className="pic-info-name">경도</span>
-            <span className="pic-info-value">{pic.longitude}</span>
+            <input
+              className="pic-info-value"
+              type="number"
+              value={pic.longitude}
+              onChange={this.onChangeLongitude}
+              />
           </div>
-        </div>
+        </form>
         <Mapbox
           // eslint-disable-next-line
           style="mapbox://styles/mapbox/streets-v9"
