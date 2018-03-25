@@ -1,9 +1,7 @@
-import axios from 'axios';
 import React, { Component } from 'react';
-import moment from 'moment';
 import './style.css';
 import Map from '../Map';
-import { getLocation } from '../../utils';
+import * as api from '../../api';
 import logo from '../../assets/main_logo.png';
 
 class App extends Component {
@@ -25,18 +23,9 @@ class App extends Component {
   };
 
   getPics = () => {
-    axios.get('api/pics')
-      .then((response) => (
-        this.convertPics(response.data)
-      )).then(this.concatPics)
+    api.readPics()
+      .then(this.concatPics)
       .catch(err => console.log(err));
-  };
-
-  convertPics = (pics) => {
-    return pics.map((pic) => {
-      pic.datetime = moment(pic.datetime, 'YY-MM-DD HH:mm:ss');
-      return pic;
-    });
   };
 
   concatPics = (newPics) => {
@@ -59,7 +48,7 @@ class App extends Component {
     if (this.state.clickedPic === null ||
         this.state.clickedPic !== clickedPic) {
       this.setState({
-        center: getLocation(clickedPic),
+        center: clickedPic.getLocation(),
         zoom: [11],
         clickedPic
       });

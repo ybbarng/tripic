@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactMapboxGL, { Layer, Feature, RotationControl, ZoomControl } from "react-mapbox-gl";
 import Config from '../../config';
-import { getImageSrc, getLocation } from '../../utils';
 import './style.css';
 
 const Mapbox = ReactMapboxGL({
@@ -28,7 +27,7 @@ class AdminPic extends Component {
     if (pic) {
       this.setState({
         pic,
-        center: getLocation(pic)
+        center: pic.getLocation()
       });
     }
   };
@@ -61,7 +60,7 @@ class AdminPic extends Component {
     if (pic) {
       return (
         <Feature
-          coordinates={getLocation(pic)}
+          coordinates={pic.getLocation()}
           />
       );
     }
@@ -79,7 +78,7 @@ class AdminPic extends Component {
     }
     return (
       <div className="pic">
-        <img className="pic-image" src={getImageSrc(pic, 427, 240)} alt="사진 미리보기" />
+        <img className="pic-image" src={pic.getImageSrc(427, 240)} alt="사진 미리보기" />
         <div className="pic-info">
           <h2>사진 정보</h2>
           <div className="pic-info">
@@ -89,7 +88,7 @@ class AdminPic extends Component {
 
           <div className="pic-info">
             <span className="pic-info-name">촬영 일시</span>
-            <span className="pic-info-value">{pic.datetime}</span>
+            <span className="pic-info-value">{pic.getDatetime()}</span>
           </div>
           <div className="pic-info">
             <span className="pic-info-name">위도</span>

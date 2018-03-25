@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Pic from './components/Pic';
 
 export const readTrips = () => {
   return axios.get('/api/trips')
@@ -22,9 +23,15 @@ export const deleteTrip = (tripId) => {
   return axios.delete(`/api/trip/${tripId}`);
 };
 
+export const readPics = (tripId) => {
+  return axios.get('/api/pics').then((response) => {
+    return Pic.convertDbsToPics(response.data);
+  });
+};
+
 export const readPicsOfTrip = (tripId) => {
   return axios.get('/api/pics', { params: { trip_id: tripId }}).then((response) => {
-    return response.data;
+    return Pic.convertDbsToPics(response.data);
   });
 };
 

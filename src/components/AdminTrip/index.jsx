@@ -11,7 +11,7 @@ import Pic from '../Pic';
 import * as api from '../../api';
 import lockImage from '../../assets/lock.png';
 import unlockImage from '../../assets/unlock.png';
-import { editObject, getImageSrc } from '../../utils';
+import { editObject } from '../../utils';
 
 class AdminTrip extends Component {
   constructor() {
@@ -307,7 +307,7 @@ class AdminTrip extends Component {
               {
                 pics && pics.map((pic, i) => (
                   <AdminThumbnail
-                    src={getImageSrc(pic, 96, 54)}
+                    src={pic.getImageSrc(96, 54)}
                     alt={pic.description || ''}
                     linkTo={`/admin/${trip.id}/${i}`}
                     key={i}
