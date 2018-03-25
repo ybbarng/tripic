@@ -3,8 +3,6 @@ import 'moment/locale/ko';
 import Config from '../config';
 import {getImageInfo} from '../utils'
 
-moment.locale('ko');
-
 
 class Pic {
   constructor() {
@@ -43,8 +41,12 @@ class Pic {
     });
   }
 
-  getDatetime = () => {
-    return this.datetime.format('LLLL');  // 2018년 3월 25일 일요일 오후 3:50
+  setDatetime = (datetime, format='YYYY-MM-DD HH:mm:ss') => {
+    this.datetime = moment(datetime, format);
+  };
+
+  getDatetime = (format='YYYY-MM-DD HH:mm:ss') => {
+    return this.datetime.format(format);
   };
 
   getImageSrc = (width, height, cropMode='c_scale') => {

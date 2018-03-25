@@ -56,6 +56,17 @@ class AdminPic extends Component {
     });
   };
 
+  onChangeDatetime = (event) => {
+    const { pic } = this.state;
+    if (!pic) {
+      return;
+    }
+    pic.setDatetime(event.target.value, 'YYYY-MM-DDTHH:mm:ss');
+    this.setState({
+      pic
+    });
+  };
+
   onChangeLatitude = (event) => {
     const { pic } = this.state;
     this.changePicLocation(event.target.value, pic.longitude, true);
@@ -122,7 +133,12 @@ class AdminPic extends Component {
 
           <div className="pic-info">
             <span className="pic-info-name">촬영 일시</span>
-            <span className="pic-info-value">{pic.getDatetime()}</span>
+            <input
+              className="pic-info-value"
+              type="datetime-local"
+              value={pic.getDatetime('YYYY-MM-DDTHH:mm:ss')}
+              onChange={this.onChangeDatetime}
+              />
           </div>
           <div className="pic-info">
             <span className="pic-info-name">위도</span>
