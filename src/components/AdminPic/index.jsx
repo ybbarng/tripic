@@ -19,7 +19,7 @@ class AdminPic extends Component {
     };
   }
 
-  setCenter = (pic, tripId, picIndex) => {
+  init = (pic, tripId, picIndex) => {
     this.setState({
       tripId,
       picIndex,
@@ -35,15 +35,15 @@ class AdminPic extends Component {
   componentDidMount = () => {
     const { tripId, picIndex } = this.props.match.params;
     const { pic } = this.props;
-    this.setCenter(pic, tripId, picIndex);
+    this.init(pic, tripId, picIndex);
   }
 
   componentWillReceiveProps = (newProps) => {
     const { tripId, picIndex } = newProps.match.params;
     const { pic } = newProps;
-    this.setCenter();
+    this.init();
     if (this.state.tripId !== tripId || this.state.picIndex !== picIndex) {
-      this.setCenter(pic, tripId, picIndex);
+      this.init(pic, tripId, picIndex);
     }
   }
 
