@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dropzone from 'react-dropzone';
+import { Route } from 'react-router-dom';
 import './style.css';
 import AlertDialog from '../AlertDialog';
 import AdminThumbnail from '../AdminThumbnail';

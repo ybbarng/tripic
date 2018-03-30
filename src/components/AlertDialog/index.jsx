@@ -1,5 +1,6 @@
 import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
