@@ -172,6 +172,53 @@ app.post('/api/pic', multipartParser.single('image'), (req, res) => {
     });
 });
 
+app.delete('/api/pic/:picId', (req, res) => {
+  if (!req.params.picId) {
+    res.status(400).send({
+      error: 'Invalid id of Pic'
+    });
+    return;
+  }
+  const picIdInt = parseInt(req.params.picId);
+  if (isNaN(picIdInt)) {
+    res.status(400).send({
+      error: 'Invalid id of Pic'
+    });
+    return;
+  }
+  database.readPic(null, picIdInt).then((pics) => {
+    console.log(pics);
+    if (pics.length < 1) {
+      throw Error(`NOT_FOUND_FROM_DB`);
+    }
+    // cloudinaryId
+    return pics[0].image_src
+              .split('/')[2]
+              .split('.')[0];
+  }).then((cloudinaryId) => {
+    console.log(`Try to remove the pic ${cloudinaryId} from cloudinary`);
+    cloudinary.v2.uploader.destroy(cloudinaryId, {invalidate: true}, (error, result) => {
+      if (error) {
+        console.error(error);
+        throw Error(error);
+      }
+      console.log('Successfully removed from cloudinary.');
+      return result
+    });
+  }).then(() => {
+    return database.deletePic(null, picIdInt);
+  }).then(() => {
+    res.status(200).send({
+      deletedPicId: picIdInt
+    });
+  }).catch((error) => {
+    console.error(error);
+    res.status(500).send({
+      error: error.message
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Express server is running on port ${port}`);
 });

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { Route } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import './style.css';
 import AlertDialog from '../AlertDialog';
 import AdminThumbnail from '../AdminThumbnail';
@@ -10,7 +11,7 @@ import Pic from '../Pic';
 import * as api from '../../api';
 import lockImage from '../../assets/lock.png';
 import unlockImage from '../../assets/unlock.png';
-import { editObject } from '../../utils';
+import { editObject, getObjectById } from '../../utils';
 
 class AdminTrip extends Component {
   constructor() {
@@ -246,6 +247,54 @@ class AdminTrip extends Component {
     }
   };
 
+  getPicById = (picId) => {
+    return getObjectById(this.state.pics, picId);
+  };
+
+  onClickDeletePic = (picId) => {
+    AlertDialog({
+      title: '사진 삭제',
+      message: '정말로 이 사진을 삭제하시겠습니까?',
+      confirmLabel: '삭제',
+      cancelLabel: '취소',
+      onConfirm: this.removePic.bind(null, picId)
+    });
+  };
+
+  removePic = (picId) => {
+    const pic = this.getPicById(picId);
+    if (!pic) {
+      return;
+    }
+    return api.deletePic(picId).then((response) => {
+        this.onDeletePic(response.data.deletedPicId);
+      }).catch((err) => {
+        console.log(err.response);
+        if (err.response.data.error === 'NOT_FOUND_FROM_DB') {
+          this.onDeletePic(picId);
+          return;
+        }
+        toast.error('에러가 발생하여 사진을 삭제하는데 실패했습니다.');
+      });
+  };
+
+  onDeletePic = (picId) => {
+    const deletedPic = this.getPicById(picId);
+    if (deletedPic === null) {
+      return;
+    }
+    const newPics = this.state.pics.slice();
+    const index = newPics.indexOf(deletedPic);
+    if (index < 0) {
+      return;
+    }
+    newPics.splice(index, 1);
+    this.setState({
+      pics: newPics
+    });
+    toast.success('사진이 성공적으로 삭제되었습니다.');
+  };
+
   render() {
     const { fetching, trip, pics, tripTitleEditText, lock, isUploading } = this.state;
     const message = (() => {
@@ -309,6 +358,7 @@ class AdminTrip extends Component {
                     src={pic.getImageSrc(96, 54)}
                     alt={pic.description || ''}
                     linkTo={`/admin/${trip.id}/${i}`}
+                    onClickDelete={this.onClickDeletePic.bind(null, pic.id)}
                     key={i}
                     />
                 ))
@@ -346,6 +396,9 @@ class AdminTrip extends Component {
               </div>
             );}
           } />
+          <ToastContainer
+            hideProgressBar={true}
+          />
         </div>
       )
     }

@@ -4,6 +4,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import './style.css';
 import AdminTrip from '../AdminTrip';
 import * as api from '../../api';
+import { getObjectById } from '../../utils';
 
 class Admin extends Component {
   constructor() {
@@ -33,15 +34,7 @@ class Admin extends Component {
   };
 
   getTripById = (tripId) => {
-    if (typeof tripId === typeof '') {
-      tripId = parseInt(tripId, 10);
-      if (isNaN(tripId)) {
-        return null;
-      }
-    }
-    return this.state.trips.find((trip) => {
-      return trip.id === tripId;
-    });
+    return getObjectById(this.state.trips, tripId);
   }
 
   createTrip = (name) => {

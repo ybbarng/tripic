@@ -40,3 +40,7 @@ export const createPic = (data) => {
     return response.data
   });
 };
+
+export const deletePic = (picId) => {
+  return axios.delete(`/api/pic/${picId}`);
+};

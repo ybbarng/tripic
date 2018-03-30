@@ -91,9 +91,22 @@ const editElement = (array, element, newEntry) => {
   return array.map((el) => ((el.id === element.id) ? editObject(el, newEntry) : el));
 };
 
+const getObjectById = (array, objectId) => {
+  if (typeof objectId === typeof '') {
+    objectId = parseInt(objectId, 10);
+    if (isNaN(objectId)) {
+      return null;
+    }
+  }
+  return array.find((object) => {
+    return object.id === objectId;
+  });
+};
+
 export {
   convertDMStoDD,
   getImageInfo,
   editObject,
   editElement,
+  getObjectById
 };

@@ -118,20 +118,26 @@ class Database {
       ORDER BY datetime ASC`, [tripId]);
   }
 
+  readPic(connection, picId) {
+    connection = connection || this.pool;
+    return connection.query(
+      `SELECT Pics.id as id, trip_id, Trips.name as trip_name, DATE_FORMAT(datetime, '%Y-%m-%d %H:%i:%s') as datetime, ST_Y(location) as latitude, ST_X(location) as longitude, image_url as image_src
+      FROM Pics LEFT OUTER JOIN Trips on Pics.trip_id = Trips.id
+      WHERE Pics.id = ?
+      ORDER BY datetime ASC`, [picId]);
+  }
+
   updatePic(connection, patch) {
     connection = connection || this.pool;
     return connection.query('UPDATE Pics SET ? WHERE id = ?', [patch.diff, patch.id]);
   }
 
-  deletePic(connection, pic) {
-    if (!pic.id) {
+  deletePic(connection, picId) {
+    if (!picId) {
       throw 'The id of pic is not provided';
     }
     connection = connection || this.pool;
-    return connection.query('DELETE FROM Pics WHERE id = ?', [pic.id]);
-  }
-
-  getPics() {
+    return connection.query('DELETE FROM Pics WHERE id = ?', [picId]);
   }
 }
 
