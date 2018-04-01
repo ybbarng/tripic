@@ -60,11 +60,11 @@ app.get('/api/trips', (req, res) => {
 app.post('/api/trip', (req, res) => {
   const body = req.body;
   database.createTrip(null, {
-    name: body.name
+    name: body.tripName
   }).then((response) => {
     res.status(200).send({
       id: response.insertId,
-      name: body.name
+      name: body.tripName
     });
   }).catch((error) => {
     console.log(error);

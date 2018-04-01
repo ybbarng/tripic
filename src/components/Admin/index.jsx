@@ -11,6 +11,7 @@ class Admin extends Component {
     super();
     this.state = {
       trips: [],
+      newTripName: ''
     }
   }
 
@@ -37,7 +38,14 @@ class Admin extends Component {
     return getObjectById(this.state.trips, tripId);
   }
 
-  createTrip = (name) => {
+  onChangeNewTripName = (event) => {
+    this.setState({
+      newTripName: event.target.value
+    });
+  }
+
+  createTrip = (event) => {
+    const name = this.state.newTripName;
     return api.createTrip(name).then((newTrip) => {
       const newTrips = this.state.trips.slice();
       newTrips.push(newTrip);
@@ -87,11 +95,20 @@ class Admin extends Component {
   };
 
   render() {
-    const { trips } = this.state;
+    const { trips, newTripName } = this.state;
     return (
       <div className="admin">
         <div className="admin-trips">
           <h1 className="admin-trips-title">여행 목록</h1>
+          <div>
+            <input
+              type="text"
+              placeholder="여행 이름"
+              value={newTripName}
+              onChange={this.onChangeNewTripName}
+              />
+            <button onClick={this.createTrip}>여행 추가</button>
+          </div>
           <List component="nav">
             { trips && trips.map((trip, i) => (
               <Link className="admin-trips-item" to={`/admin/${trip.id}`} style={{ textDecoration: 'none' }} key={i}>
