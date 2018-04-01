@@ -22,6 +22,19 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+const getCloudinaryId = (pic) => {
+  return pic.image_src
+            .split('/')[2]
+            .split('.')[0];
+};
+
+const chunker = (n) => {
+  return function(p, c, i) {
+    (p[i/n|0] = p[i/n|0] || []).push(c);
+    return p;
+  };
+}
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello from Express' });
 });
@@ -113,8 +126,26 @@ app.delete('/api/trip/:tripId', (req, res) => {
     });
     return;
   }
-  database.deleteTrip(null, {
-    id: tripIdInt,
+  database.readPicsOfTrip(null, tripIdInt).then((rows) => {
+    return rows.map((row, i) => (getCloudinaryId(row)));
+  }).then((cloudinaryIds) => {
+    console.log(`Try to remove the pics of the trip: ${tripIdInt}`);
+    return Promise.all(cloudinaryIds.reduce(chunker(100), []).map((chunk, i) => {
+      console.log(`Chunk length: ${chunk.length}`);
+      return cloudinary.v2.api.delete_resources(cloudinaryIds, {invalidate: true}, (error, result) => {
+          if (error) {
+            console.log(error);
+            throw Error(error);
+          }
+          console.log('Successfully removed from cloudinary.');
+          return result;
+        });
+    }));
+  }).then(() => {
+    console.log('deleteDB');
+    return database.deleteTrip(null, {
+      id: tripIdInt,
+    });
   }).then(() => {
     res.status(200).send({
       message: `Trip ${tripIdInt} is deleted`
@@ -191,10 +222,7 @@ app.delete('/api/pic/:picId', (req, res) => {
     if (pics.length < 1) {
       throw Error(`NOT_FOUND_FROM_DB`);
     }
-    // cloudinaryId
-    return pics[0].image_src
-              .split('/')[2]
-              .split('.')[0];
+    return getCloudinaryId(pics[0]);
   }).then((cloudinaryId) => {
     console.log(`Try to remove the pic ${cloudinaryId} from cloudinary`);
     cloudinary.v2.uploader.destroy(cloudinaryId, {invalidate: true}, (error, result) => {

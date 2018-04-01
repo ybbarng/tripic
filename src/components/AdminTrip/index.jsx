@@ -145,9 +145,14 @@ class AdminTrip extends Component {
   };
 
   onClickRemove = () => {
+    var message = '정말로 이 여행 항목을 삭제하시겠습니까?';
+    const nPics = this.state.pics.length;
+    if (nPics > 0) {
+      message += `\n(주의) 이 여행에 포함된 ${nPics} 개의 사진도 같이 삭제됩니다.`;
+    }
     AlertDialog({
       title: '여행 삭제',
-      message: '정말로 이 여행 항목을 삭제하시겠습니까?',
+      message,
       confirmLabel: '삭제',
       cancelLabel: '취소',
       onConfirm: this.removeTrip,

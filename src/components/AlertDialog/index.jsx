@@ -24,7 +24,10 @@ const AlertDialog = (properties) => {
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-            {message}
+            {
+              message.split('\n').map((line, i) => (
+                <span key={i}>{line}<br /></span>))
+            }
             </DialogContentText>
           </DialogContent>
           <DialogActions>
