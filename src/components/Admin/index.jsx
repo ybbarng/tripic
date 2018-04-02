@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
+import Button from 'material-ui/Button';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import TextField from 'material-ui/TextField';
 import './style.css';
 import AdminTrip from '../AdminTrip';
 import * as api from '../../api';
@@ -101,13 +103,19 @@ class Admin extends Component {
         <div className="admin-trips">
           <h1 className="admin-trips-title">여행 목록</h1>
           <div>
-            <input
+            <TextField
               type="text"
-              placeholder="여행 이름"
+              label="여행 이름"
               value={newTripName}
               onChange={this.onChangeNewTripName}
               />
-            <button onClick={this.createTrip}>여행 추가</button>
+            <Button
+              variant="raised"
+              color="primary"
+              onClick={this.createTrip}
+              >
+              여행 추가
+            </Button>
           </div>
           <List component="nav">
             { trips && trips.map((trip, i) => (
