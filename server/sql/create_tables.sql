@@ -28,3 +28,14 @@ CREATE TABLE IF NOT EXISTS PicsTags (
     FOREIGN KEY (tag_id) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (pic_id, tag_id)
 );
+
+CREATE TABLE IF NOT EXISTS Regions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    located_in_id INT,
+    native_language_name VARCHAR(100) NOT NULL,
+    korean_name VARCHAR(100) NOT NULL,
+    geometry MULTIPOLYGON NOT NULL,
+    geojson TEXT NOT NULL,
+    FOREIGN KEY (located_in_id) REFERENCES Regions (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    SPATIAL INDEX (geometry)
+);
