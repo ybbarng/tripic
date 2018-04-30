@@ -6,12 +6,12 @@ import './style.css';
 class Map extends Component {
   constructor() {
     super();
-    this.defaultScale = 150;
+    this.defaultScale = 200;
     this.state = {
       selected: null,
-      projection: 'mercator',
+      projection: 'times',
       scale: this.defaultScale,
-      center: [137, 0]
+      center: [11, 0]
     }
   }
 
