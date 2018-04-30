@@ -80,17 +80,7 @@ class App extends Component {
       <header className="app-header">
         <img src={logo} className="app-title" alt="Tripic" />
       </header>
-      <Map
-        pics={pics}
-        center={center}
-        zoom={zoom}
-        clickedPic={clickedPic}
-        hoveredPic={hoveredPic}
-        onMovedMap={this.onMovedMap}
-        onClickMarker={this.onClickMarker}
-        onMouseEnterMarker={this.onMouseEnterMarker}
-        onMouseLeaveMarker={this.onMouseLeaveMarker}
-        />
+      <Map />
     </div>
     );
   }

@@ -1,85 +1,54 @@
 import React, { Component } from 'react';
-import ReactMapboxGL, { Layer, Feature, Popup, RotationControl, ZoomControl } from "react-mapbox-gl";
-import Config from '../../config';
+import { ComposableMap, ZoomableGroup, Geographies, Geography } from 'react-simple-maps';
 import './style.css';
-
-const Mapbox = ReactMapboxGL({
-  accessToken: Config.mapboxAccessToken
-});
 
 class Map extends Component {
   render() {
-    const { pics, center, zoom, clickedPic, hoveredPic,
-      onMovedMap, onClickMarker, onMouseEnterMarker,
-      onMouseLeaveMarker } = this.props;
-
-    const createMarker = (pic, i) => (
-      <Feature
-        coordinates={pic.getLocation()}
-        onClick={onClickMarker.bind(null, pic)}
-        onMouseEnter={onMouseEnterMarker.bind(null, pic)}
-        onMouseLeave={onMouseLeaveMarker.bind(null, pic)}
-        key={i}
-        />
-    );
     return (
-      <Mapbox
-        // eslint-disable-next-line
-        style="mapbox://styles/mapbox/streets-v9"
-        onMoveEnd={onMovedMap}
-        center={center}
-        zoom={zoom}
-        containerStyle={{
-          height: "100%",
-          width: "100vw"
-        }}>
-        <ZoomControl
-          style={{
-            top: "60px",
-            left: "20px"
+      <div className="Map">
+        <ComposableMap
+          projectionConfig={{
+            scale: 205,
+            rotation: [-11, 0, 0]
           }}
-          position="top-left" />
-        <RotationControl
+          width={980}
+          height={702}
           style={{
-            top: "112px",
-            left: "20px"
+            width: '100%',
+            height: 'auto'
           }}
-          position="top-left" />
-        <Layer
-          type="circle"
-          id="marker"
-          paint={{
-            "circle-radius": {
-              "base": 5,
-              "stops":[[11, 5], [18, 20]],
-            },
-            "circle-color": '#9302f4'
-          }}>
-          { pics && pics.map(createMarker) }
-        </Layer>
-        { clickedPic &&
-          <Popup
-            coordinates={clickedPic.getLocation()}
-            >
-            <img
-              className="mapbox-popup-image"
-              src={clickedPic.getImageSrc(80, 45)}
-              alt={clickedPic.description || ''}
+        >
+          <Geographies geography="/topojson/world.json">
+            {(geographies, projection) => geographies.map((geography, i) => (
+              <Geography
+                key={i}
+                geography={geography}
+                projection={projection}
+                style={{
+                  default: {
+                    fill: "#ECEFF1",
+                    stroke: "#607D8B",
+                    strokeWidth: 0.75,
+                    outline: "none",
+                  },
+                  hover: {
+                    fill: "#607D8B",
+                    stroke: "#607D8B",
+                    strokeWidth: 0.75,
+                    outline: "none",
+                  },
+                  pressed: {
+                    fill: "#FF5722",
+                    stroke: "#607D8B",
+                    strokeWidth: 0.75,
+                    outline: "none",
+                  },
+                }}
               />
-          </Popup>
-        }
-        { hoveredPic &&
-          <Popup
-            coordinates={hoveredPic.getLocation()}
-            >
-            <img
-              className="mapbox-popup-image"
-              src={hoveredPic.getImageSrc(80, 45)}
-              alt={hoveredPic.description || ''}
-              />
-          </Popup>
-        }
-      </Mapbox>
+            ))}
+          </Geographies>
+        </ComposableMap>
+      </div>
     );
   }
 }
