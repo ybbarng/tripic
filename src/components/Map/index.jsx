@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { ComposableMap, ZoomableGlobe, Geographies, Geography } from 'react-simple-maps';
+import { geoBounds, geoCentroid } from 'd3-geo';
 import './style.css';
 
 class Map extends Component {
   constructor() {
     super();
     this.state = {
-      selected: null
+      selected: null,
+      scale: 205,
+      center: [137, 0]
     }
   }
 
@@ -14,19 +17,30 @@ class Map extends Component {
 
   onClick = (region) => {
     console.log(region);
+    const bounds = geoBounds(region.geometry);
+    const center = geoCentroid(region.geometry);
+    console.log(center);
+    console.log(bounds);
+    const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * 205);
+    const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * 205);
+    console.log(widthScale);
+    console.log(heightScale);
     this.setState({
-      selected: this.getRegionId(region)
+      selected: this.getRegionId(region),
+      scale: Math.min(widthScale, heightScale),
+      center
     });
   }
 
   render() {
-    const { selected } = this.state;
+    const { selected, scale, center } = this.state;
+    console.log(scale);
 
     return (
       <div className="Map">
         <ComposableMap
           projectionConfig={{
-            scale: 205,
+            scale,
             rotation: [-11, 0, 0]
           }}
           width={980}
@@ -37,7 +51,7 @@ class Map extends Component {
           }}
         >
           <ZoomableGlobe
-            center={[137, 0]}
+            center={center}
             disablePanning
             >
             <Geographies
