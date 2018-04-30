@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { get } from 'axios';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { geoBounds, geoCentroid } from 'd3-geo';
+import { feature } from 'topojson-client';
 import './style.css';
 
 class Map extends Component {
@@ -8,6 +10,8 @@ class Map extends Component {
     super();
     this.defaultScale = 200;
     this.state = {
+      parent: 'world',
+      geographPaths: [],
       selected: null,
       projection: 'times',
       scale: this.defaultScale,
@@ -15,7 +19,43 @@ class Map extends Component {
     }
   }
 
-  getRegionId = (region) => (region.properties.NAME_LONG);
+  componentDidMount = () => {
+    this.loadGeoJson();
+  };
+
+  loadGeoJson = () => {
+    const name = this.state.parent;
+    console.log(`/topojson/${name}.json`);
+    get(`/topojson/${name}.json`)
+      .then(res => {
+        if (res.status !== 200) {
+          return;
+        }
+        const data = res.data;
+        console.log(data);
+        const geographyPaths = feature(
+          data,
+          data.objects[Object.keys(data.objects)[0]]
+        ).features;
+        this.setState({
+          geographyPaths,
+          selected: null
+        });
+      });
+  };
+
+  getRegionId = (region) => {
+    var regionId = '';
+    switch (this.state.parent) {
+      case 'world':
+        regionId = region.properties.NAME_LONG;
+        break;
+      case 'KOR':
+        regionId = region.properties.name;
+        break;
+    }
+    return regionId.replace(/ /g, '_');
+  };
 
   onClick = (region) => {
     console.log(region);
@@ -35,11 +75,15 @@ class Map extends Component {
       scale: Math.min(widthScale, heightScale),
       center
     });
+    this.setState({
+      parent: this.getRegionId(region)
+    }, () => {
+      this.loadGeoJson();
+    });
   }
 
   render() {
-    const { selected, projection, scale, center } = this.state;
-    console.log(scale);
+    const { geographyPaths, selected, projection, scale, center } = this.state;
 
     return (
       <div className="Map">
@@ -57,7 +101,7 @@ class Map extends Component {
           }}
         >
           <Geographies
-            geography="/topojson/world.json"
+            geography={geographyPaths}
             disableOptimization
           >
             {(geographies, projection) => geographies
