@@ -6,9 +6,11 @@ import './style.css';
 class Map extends Component {
   constructor() {
     super();
+    this.defaultScale = 150;
     this.state = {
       selected: null,
-      scale: 205,
+      projection: 'mercator',
+      scale: this.defaultScale,
       center: [137, 0]
     }
   }
@@ -20,31 +22,35 @@ class Map extends Component {
     const bounds = geoBounds(region.geometry);
     const center = geoCentroid(region.geometry);
     console.log(center);
-    console.log(bounds);
-    const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * 205);
-    const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * 205);
+    console.log(bounds[1][0] - bounds[0][0]);
+    console.log(bounds[1][1] - bounds[0][1]);
+    const sizeFactor = region.properties.NAME_LONG === 'United States' ? 540 : 180;
+    const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * sizeFactor);
+    const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * sizeFactor);
     console.log(widthScale);
     console.log(heightScale);
     this.setState({
       selected: this.getRegionId(region),
+      projection: 'orthographic',
       scale: Math.min(widthScale, heightScale),
       center
     });
   }
 
   render() {
-    const { selected, scale, center } = this.state;
+    const { selected, projection, scale, center } = this.state;
     console.log(scale);
 
     return (
       <div className="Map">
         <ComposableMap
+          projection={projection}
           projectionConfig={{
             scale,
             rotation: [-11, 0, 0]
           }}
           width={980}
-          height={702}
+          height={900}
           style={{
             width: '100%',
             height: 'auto'
