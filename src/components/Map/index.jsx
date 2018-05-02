@@ -10,7 +10,7 @@ class Map extends Component {
     super();
     this.defaultScale = 200;
     this.state = {
-      parent: 'world',
+      regionId: '000',
       geographPaths: [],
       selected: null,
       projection: 'times',
@@ -24,9 +24,7 @@ class Map extends Component {
   };
 
   loadGeoJson = () => {
-    const name = this.state.parent;
-    console.log(`/topojson/${name}.json`);
-    get(`/topojson/${name}.json`)
+    get(`/topojson/${this.state.regionId}.json`)
       .then(res => {
         if (res.status !== 200) {
           return;
@@ -45,16 +43,7 @@ class Map extends Component {
   };
 
   getRegionId = (region) => {
-    var regionId = '';
-    switch (this.state.parent) {
-      case 'world':
-        regionId = region.properties.NAME_LONG;
-        break;
-      case 'KOR':
-        regionId = region.properties.name;
-        break;
-    }
-    return regionId.replace(/ /g, '_');
+    return region.properties.id;
   };
 
   onClick = (region) => {
@@ -64,7 +53,7 @@ class Map extends Component {
     console.log(center);
     console.log(bounds[1][0] - bounds[0][0]);
     console.log(bounds[1][1] - bounds[0][1]);
-    const sizeFactor = region.properties.NAME_LONG === 'United States' ? 540 : 180;
+    const sizeFactor = region.properties.name === 'United States of America' ? 540 : 180;
     const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * sizeFactor);
     const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * sizeFactor);
     console.log(widthScale);
@@ -76,7 +65,7 @@ class Map extends Component {
       center
     });
     this.setState({
-      parent: this.getRegionId(region)
+      regionId: this.getRegionId(region)
     }, () => {
       this.loadGeoJson();
     });
