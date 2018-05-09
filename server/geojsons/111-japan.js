@@ -20,7 +20,7 @@ const loadCountryTopoJson = () => {
   return loadTopoJson('https://raw.githubusercontent.com/dataofjapan/land/master/japan.topojson');
 };
 
-const editPrefectureProperty = (property, i) => {
+const editPrefectureProperty = (property) => {
   /*
   {"nam":"Kyoto Fu","nam_ja":"京都府","id":26}
   */
@@ -31,18 +31,18 @@ const editPrefectureProperty = (property, i) => {
   }
 };
 
-const editTopoJson = (data, getProperties) => {
+const editTopoJson = (data) => {
   const objectsKey = Object.keys(data.objects)[0];
   const geometries = data.objects[objectsKey].geometries;
   for (var i = 0; i < geometries.length; i++) {
-    geometries[i].properties = getProperties(geometries[i]);
+    geometries[i].properties = editPrefectureProperty(geometries[i].properties);
   }
   data.objects[objectsKey].geometries = geometries;
   return data;
 };
 
 loadCountryTopoJson().then((data) => {
-  return editTopoJson(data, (geometry) => editPrefectureProperty(geometry.properties));
+  return editTopoJson(data);
 }).then((data) => {
   return fs.writeFile(`outputs/${countryId}.json`, JSON.stringify(data), (error) => {
     if (error) {
@@ -69,10 +69,37 @@ const getMunicipalityProperty = (geometry) => {
   }
 };
 
+const editMunicipalityTopoJson = (data) => {
+  const objectsKey = Object.keys(data.objects)[0];
+  const geometries = data.objects[objectsKey].geometries;
+  const multiPolygons = {}
+  for (var i = 0; i < geometries.length; i++) {
+    const geometryId = geometries[i].id;
+    if (!(geometryId in multiPolygons)) {
+      const newGeometry = {
+        'type': 'MultiPolygon',
+        'properties': getMunicipalityProperty(geometries[i]),
+        'arcs': []
+      }
+      multiPolygons[geometryId] = newGeometry;
+    }
+    multiPolygons[geometryId].arcs.push(geometries[i].arcs);
+  }
+  const newGeometries = [];
+  const keys = Object.keys(multiPolygons);
+  keys.sort();
+  for (const key of keys) {
+    newGeometries.push(multiPolygons[key]);
+  }
+  data.objects[objectsKey].geometries = newGeometries;
+  return data;
+};
+
 Array.from(Array(47).keys()).map((i) => {
   const prefectureId = zeroFill(i + 1, 2);
   loadPrefectureTopoJson(prefectureId).then((data) => {
-    return editTopoJson(data, (geometry) => (getMunicipalityProperty(geometry)));
+    console.log(`outputs/${countryId}${prefectureId}.json`);
+    return editMunicipalityTopoJson(data, (geometry) => (getMunicipalityProperty(geometry)));
   }).then((data) => {
     return fs.writeFile(`outputs/${countryId}${prefectureId}.json`, JSON.stringify(data), (error) => {
       if (error) {
