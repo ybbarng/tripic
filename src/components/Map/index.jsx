@@ -94,7 +94,7 @@ class Map extends Component {
             disableOptimization
           >
             {(geographies, projection) => geographies
-                .filter((geography) => (this.getRegionId(geography) !== 'Antarctica' &&
+                .filter((geography) => (this.getRegionId(geography) !== '012' /* Antarctica */ &&
                                         (selected == null || selected === this.getRegionId(geography))))
                 .map((geography, i) => (
                   <Geography
