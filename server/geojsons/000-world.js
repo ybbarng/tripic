@@ -51,7 +51,7 @@ loadTopoJson()
     return editTopoJson(data);
   })
   .then((data) => {
-    return fs.writeFile('000.json', JSON.stringify(data), (error) => {
+    return fs.writeFile('outputs/000.json', JSON.stringify(data), (error) => {
       if (error) {
         throw error;
       }
