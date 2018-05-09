@@ -1,14 +1,7 @@
 const { get } = require('axios');
 const fs = require('fs');
 const wkx = require('wkx');
-
-const zeroFill = (number, width) => {
-  const padWidth = width - number.toString().length;
-  if (width > 0) {
-    return new Array(padWidth + (/\./.test(number) ? 2 : 1)).join('0') + number;
-  }
-  return number + ""; // always return a string
-}
+const { zeroFill } = require('./utils');
 
 const loadTopoJson = () => {
   return get('https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json')
