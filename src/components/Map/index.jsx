@@ -54,7 +54,7 @@ class Map extends Component {
     console.log(center);
     console.log(bounds[1][0] - bounds[0][0]);
     console.log(bounds[1][1] - bounds[0][1]);
-    const sizeFactor = region.properties.name === 'United States of America' ? 540 : 180;
+    const sizeFactor = region.properties.name === 'United States of America' ? 240 : 100;
     const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * sizeFactor);
     const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * sizeFactor);
     console.log(widthScale);
