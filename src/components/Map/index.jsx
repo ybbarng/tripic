@@ -8,7 +8,7 @@ import './style.css';
 class Map extends Component {
   constructor() {
     super();
-    this.defaultScale = 200;
+    this.defaultScale = 180;
     this.state = {
       regionId: '000',
       geographPaths: [],
@@ -80,13 +80,13 @@ class Map extends Component {
           projection={projection}
           projectionConfig={{
             scale,
-            rotation: [-center[0], -center[1], 0]
+            rotation: [-center[0], -center[1], 0],
+            yOffset: 50
           }}
-          width={980}
-          height={900}
           style={{
             width: '100%',
-            height: 'auto'
+            height: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <Geographies
