@@ -15,7 +15,8 @@ class Map extends Component {
       selected: null,
       projection: 'times',
       scale: this.defaultScale,
-      center: [11, 0]
+      center: [11, 0],
+      yOffset: 50
     }
   }
 
@@ -62,7 +63,8 @@ class Map extends Component {
       selected: this.getRegionId(region),
       projection: 'orthographic',
       scale: Math.min(widthScale, heightScale),
-      center
+      center,
+      yOffset: 0
     });
     this.setState({
       regionId: this.getRegionId(region)
@@ -72,7 +74,7 @@ class Map extends Component {
   }
 
   render() {
-    const { geographyPaths, selected, projection, scale, center } = this.state;
+    const { geographyPaths, selected, projection, scale, center, yOffset } = this.state;
 
     return (
       <div className="Map">
@@ -81,7 +83,7 @@ class Map extends Component {
           projectionConfig={{
             scale,
             rotation: [-center[0], -center[1], 0],
-            yOffset: 50
+            yOffset
           }}
           style={{
             width: '100%',
