@@ -18,6 +18,13 @@ class Map extends Component {
       center: [11, 0],
       yOffset: 50
     }
+    this.sizeFactors = new Proxy({
+      '111': 150, // Japan
+      '119': 150, // Republic of Korea
+      '227': 240, // United States of America
+    }, {
+      get: (dict, countryId) => countryId in dict ? dict[countryId] : 100
+    });
   }
 
   componentDidMount = () => {
@@ -54,7 +61,7 @@ class Map extends Component {
     console.log(center);
     console.log(bounds[1][0] - bounds[0][0]);
     console.log(bounds[1][1] - bounds[0][1]);
-    const sizeFactor = region.properties.name === 'United States of America' ? 240 : 100;
+    const sizeFactor = this.sizeFactors[region.properties.id];
     const widthScale = Math.abs(360 / (bounds[1][0] - bounds[0][0]) * sizeFactor);
     const heightScale = Math.abs(180 / (bounds[1][1] - bounds[0][1]) * sizeFactor);
     console.log(widthScale);
