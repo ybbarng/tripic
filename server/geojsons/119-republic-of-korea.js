@@ -44,17 +44,19 @@ const editTopoJson = (data) => {
   return data;
 };
 
-loadCountryTopoJson().then((data) => {
-  return editTopoJson(data);
-}).then((data) => {
-  return fs.writeFile(`outputs/${countryId}.json`, JSON.stringify(data), (error) => {
-    if (error) {
-      throw error;
-    }
+const loadCountry = () => {
+  loadCountryTopoJson().then((data) => {
+    return editTopoJson(data);
+  }).then((data) => {
+    return fs.writeFile(`outputs/${countryId}.json`, JSON.stringify(data), (error) => {
+      if (error) {
+        throw error;
+      }
+    });
+  }).catch((e) => {
+    console.error(e);
   });
-}).catch((e) => {
-  console.error(e);
-});
+};
 
 
 // 모든 광역시/도 정보. 각 지역 별로 잘라서 저장
@@ -62,29 +64,32 @@ const loadMunicipalitiesTopoJson = () => {
   return loadTopoJson('https://raw.githubusercontent.com/southkorea/southkorea-maps/master/kostat/2013/json/skorea_municipalities_topo.json');
 };
 
-const splitMunicipalitiesTopoJson = (data) => {
+const splitTopoJson = (data, idLength) => {
   const geographyPaths = feature(
     data,
     data.objects[Object.keys(data.objects)[0]]
   ).features;
   const municipalities = groupBy(geographyPaths, (geography) => {
-    return geography.properties.id.substr(0, 5);
+    return geography.properties.id.substr(0, idLength);
   });
   return municipalities;
 };
 
-loadMunicipalitiesTopoJson().then((data) => {
-  return editTopoJson(data);
-}).then((data) => {
-  const municipalities = splitMunicipalitiesTopoJson(data);
+const splitMunicipalitiesTopoJson = (data) => {
+  return splitTopoJson(data, 5);
+};
+
+const splitAndSave = (data, categoryIdLength, categoryName) => {
+  const municipalities = splitTopoJson(data, categoryIdLength);
   return Promise.all(Array.from(municipalities.keys()).sort().map((municipalityId) => {
     console.log(municipalityId);
     const data = topology(municipalities.get(municipalityId));
+    const objectsName = `skorea_${categoryName}_geo`;
     const topoJson = {
       'type': 'Topology',
       //'transform': {'scale':[0.00029019291197877233,0.0002505167879320917],'translate':[124.61330721874788,33.10915891208669]},
       'objects': {
-        'skorea_municipalities_geo': {
+        objectsName: {
           'type': 'GeometryCollection',
           'geometries': Object.keys(data.objects).map((key) => {
             return data.objects[key];
@@ -99,7 +104,35 @@ loadMunicipalitiesTopoJson().then((data) => {
       }
     });
   }));
-}).catch((e) => {
-  console.error(e);
-});
+};
 
+const loadMunicipalities = () => {
+  loadMunicipalitiesTopoJson().then((data) => {
+    return editTopoJson(data);
+  }).then((data) => {
+    return splitAndSave(data, 5, 'municipalities');
+  }).catch((e) => {
+    console.error(e);
+  });
+};
+
+
+// 모든 읍/면/동 정보. 각 시/군/구 별로 잘라서 저장
+const loadSubmunicipalitiesTopoJson = () => {
+  return loadTopoJson('https://raw.githubusercontent.com/southkorea/southkorea-maps/master/kostat/2013/json/skorea_submunicipalities_topo.json');
+};
+
+const loadSubmunicipalities = () => {
+  loadSubmunicipalitiesTopoJson().then((data) => {
+    return editTopoJson(data);
+  }).then((data) => {
+    return splitAndSave(data, 8, 'submunicipalities');
+  }).catch((e) => {
+    console.error(e);
+  });
+};
+
+
+loadCountry();
+loadMunicipalities();
+loadSubmunicipalities();
