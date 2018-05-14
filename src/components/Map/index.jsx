@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'axios';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { Annotation, Annotations, ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import { geoBounds, geoCentroid } from 'd3-geo';
 import { feature } from 'topojson-client';
 import './style.css';
@@ -81,7 +81,7 @@ class Map extends Component {
   }
 
   render() {
-    const { geographyPaths, selected, projection, scale, center, yOffset } = this.state;
+    const { regionId, geographyPaths, selected, projection, scale, center, yOffset } = this.state;
 
     const filteredGeographies = geographyPaths ? geographyPaths.filter((geography) => (this.getRegionId(geography) !== '012' /* Antarctica */ &&
       (selected == null || selected === this.getRegionId(geography)))) : null;
@@ -100,11 +100,12 @@ class Map extends Component {
             boxSizing: 'border-box'
           }}
         >
-          <Geographies
-            geography={filteredGeographies}
-            disableOptimization
-          >
-            {(geographies, projection) => geographies.map((geography, i) => (
+          <ZoomableGroup disablePanning>
+            <Geographies
+              geography={filteredGeographies}
+              disableOptimization
+            >
+              {(geographies, projection) => geographies.map((geography, i) => (
                   <Geography
                     key={this.getRegionId(geography)}
                     geography={geography}
@@ -131,8 +132,31 @@ class Map extends Component {
                       },
                     }}
                   />
-            ))}
-          </Geographies>
+              ))}
+            </Geographies>
+            <Annotations>
+            { filteredGeographies && regionId !== '000' && filteredGeographies.map((geography) => {
+              const myCenter = geoCentroid(geography.geometry);
+              console.log(myCenter);
+              console.log(myCenter[0]);
+              return (
+                <Annotation
+                  key={this.getRegionId(geography)}
+                  dx={0}
+                  dy={0}
+                  subject={myCenter}
+                  strokeWidth={1}
+                  style= {{
+                    fill: '#666',
+                    fontSize: '10px'
+                  }}
+                >
+                  <text>{geography.properties.native_language_name}</text>
+                </Annotation>
+              );
+            })}
+            </Annotations>
+            </ZoomableGroup>
         </ComposableMap>
       </div>
     );
