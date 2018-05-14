@@ -6,6 +6,22 @@ const zeroFill = (number, width) => {
   return number + ""; // always return a string
 }
 
+// https://stackoverflow.com/a/38327540
+function groupBy(list, keyGetter) {
+	const map = new Map();
+	list.forEach((item) => {
+		const key = keyGetter(item);
+		const collection = map.get(key);
+		if (!collection) {
+			map.set(key, [item]);
+		} else {
+			collection.push(item);
+		}
+	});
+	return map;
+}
+
 module.exports = {
-  zeroFill: zeroFill
+  zeroFill: zeroFill,
+  groupBy: groupBy
 };
