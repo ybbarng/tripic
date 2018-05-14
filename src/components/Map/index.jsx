@@ -83,6 +83,8 @@ class Map extends Component {
   render() {
     const { geographyPaths, selected, projection, scale, center, yOffset } = this.state;
 
+    const filteredGeographies = geographyPaths ? geographyPaths.filter((geography) => (this.getRegionId(geography) !== '012' /* Antarctica */ &&
+      (selected == null || selected === this.getRegionId(geography)))) : null;
     return (
       <div className="Map">
         <ComposableMap
@@ -99,13 +101,10 @@ class Map extends Component {
           }}
         >
           <Geographies
-            geography={geographyPaths}
+            geography={filteredGeographies}
             disableOptimization
           >
-            {(geographies, projection) => geographies
-                .filter((geography) => (this.getRegionId(geography) !== '012' /* Antarctica */ &&
-                                        (selected == null || selected === this.getRegionId(geography))))
-                .map((geography, i) => (
+            {(geographies, projection) => geographies.map((geography, i) => (
                   <Geography
                     key={this.getRegionId(geography)}
                     geography={geography}
